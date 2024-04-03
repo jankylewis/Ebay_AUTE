@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="API Test > Category Browsing Tests"
+       parallel="tests"
+       thread-count="3">
+
+    <test name="SASINGLEBROWSECATEGORIES_01">
+        <classes>
+            <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SASINGLEBROWSECATEGORIES_02">
+        <classes>
+            <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully1"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SASINGLEBROWSECATEGORIES_03">
+        <classes>
+            <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully2"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

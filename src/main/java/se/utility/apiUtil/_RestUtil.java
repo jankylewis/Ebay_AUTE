@@ -15,23 +15,7 @@ import static io.restassured.RestAssured.given;
 
 public class _RestUtil {
 
-    //region Processing RestUtil instance
-
-//    protected static final RestUtil INSTANCE = getInstance();
-
     public _RestUtil() {}
-
-//    public static RestUtil getInstance() {
-//        return RestUtilHelper._INSTANCE;
-//    }
-
-//    private static final class RestUtilHelper {
-//        private static final RestUtil _INSTANCE = new _RestUtil();
-//    }
-
-    //endregion
-
-    //region Introducing variables
 
     private RequestSpecification _requestSpecification;
     private Response response;
@@ -52,7 +36,7 @@ public class _RestUtil {
 
     private void setAccessToken() {
 
-        String accessToken = AuthenticationUtil.getAccessToken();
+        String accessToken = new _AuthenticationUtil().getAccessToken();
 
         _requestSpecification
                 .given()
@@ -80,6 +64,10 @@ public class _RestUtil {
         return response = _requestSpecification.get(_requestedUri);
     }
 
+    private Response sendPostRequest() {
+        return response = _requestSpecification.post(_requestedUri);
+    }
+
     public Response sendAuthenticatedRequestWithResponse(
             String requestedUri,
             @Nullable Collection<Pair<Object, Object>> requestedBody,
@@ -100,14 +88,36 @@ public class _RestUtil {
 
         switch (requestedMethod) {
             case GET -> sendGetRequest();
-//            case POST -> sendPostRequest();
-//            case PUT -> sendPutRequest();
-//            case HEAD -> sendHeadRequest();
-//            case PATCH -> sendPatchRequest();
-//            case DELETE -> sendDeleteRequest();
-//            case OPTIONS -> sendOptionsRequest();
+            case POST -> sendPostRequest();
         }
         return response;
+    }
+
+    public void sendBasicRequest(
+            String requestedUri,
+            @Nullable Collection<Pair<Object, Object>> requestedBody,
+            @Nullable ContentType requestedContentType,
+            EMethod requestedMethod
+    ) {
+
+        setRequestedUri(requestedUri);
+
+        //Invoking a requested body if needed
+        if (requestedContentType != null && requestedBody != null) {
+            switch (requestedContentType) {
+                case URLENC -> buildUrlencodedForm(requestedBody);
+            }
+        }
+
+        switch (requestedMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+        }
+    }
+
+    protected String getPropertyValue(String property) {
+        jsonPath = new JsonPath(response.asPrettyString());
+        return jsonPath.get(property);
     }
 
     //region API methods
