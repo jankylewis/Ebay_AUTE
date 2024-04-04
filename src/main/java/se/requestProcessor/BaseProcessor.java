@@ -47,10 +47,10 @@ public class BaseProcessor extends BaseApiService implements IVerification {
         return Pair.with(responseHealth, responseStatusCode);
     }
 
-    protected Pair<Boolean, Integer> verifyResponseStatusCodeWentRed(@NotNull Response response) {
+    protected Pair<Boolean, Integer> verifyApiThrownErrorWithInvalidAccessToken(@NotNull Response response) {
 
         responseStatusCode = response.statusCode();
-        responseHealth = responseStatusCode == apiConstant.RED_STATUS;
+        responseHealth = responseStatusCode == apiConstant.UNAUTHORIZED;
 
         return Pair.with(responseHealth, responseStatusCode);
     }

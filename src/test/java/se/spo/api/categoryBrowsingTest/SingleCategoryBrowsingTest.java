@@ -11,6 +11,15 @@ public class SingleCategoryBrowsingTest extends BaseApiTestService {
 
     @Test(
             priority = 1,
+            testName = "SASINGLEBROWSECATEGORIES_07"
+    )
+    protected void spotifyApiTest_VerifyApiProcessedRequestWithInvalidAccessToken() {
+        Response apiResponse = singleBrowseCategoryProcessor.getSingleCategoriesSuccessfully("kpop");
+        singleBrowseCategoryProcessor.verifySingleBrowseCategoryApiDisallowedInvalidAccessToken(apiResponse);
+    }
+
+    @Test(
+            priority = 1,
             testName = "SASINGLEBROWSECATEGORIES_01"
     )
     protected void spotifyApiTest_VerifyApiProcessedRequestSuccessfully() {
@@ -32,6 +41,33 @@ public class SingleCategoryBrowsingTest extends BaseApiTestService {
             testName = "SASINGLEBROWSECATEGORIES_03"
     )
     protected void spotifyApiTest_VerifyApiProcessedRequestSuccessfully2() {
+        Response apiResponse = singleBrowseCategoryProcessor.getSingleCategoriesSuccessfully("kpop");
+        singleBrowseCategoryProcessor.verifySingleBrowseCategoryApiRespondedGreenly(apiResponse);
+    }
+
+    @Test(
+            priority = 1,
+            testName = "SASINGLEBROWSECATEGORIES_04"
+    )
+    protected void spotifyApiTest_VerifyApiProcessedRequestSuccessfully3() {
+        Response apiResponse = singleBrowseCategoryProcessor.getSingleCategoriesSuccessfully("kpop");
+        singleBrowseCategoryProcessor.verifySingleBrowseCategoryApiRespondedGreenly(apiResponse);
+    }
+
+    @Test(
+            priority = 1,
+            testName = "SASINGLEBROWSECATEGORIES_05"
+    )
+    protected void spotifyApiTest_VerifyApiProcessedRequestSuccessfully4() {
+        Response apiResponse = singleBrowseCategoryProcessor.getSingleCategoriesSuccessfully("kpop");
+        singleBrowseCategoryProcessor.verifySingleBrowseCategoryApiRespondedGreenly(apiResponse);
+    }
+
+    @Test(
+            priority = 1,
+            testName = "SASINGLEBROWSECATEGORIES_06"
+    )
+    protected void spotifyApiTest_VerifyApiProcessedRequestSuccessfully5() {
         Response apiResponse = singleBrowseCategoryProcessor.getSingleCategoriesSuccessfully("kpop");
         singleBrowseCategoryProcessor.verifySingleBrowseCategoryApiRespondedGreenly(apiResponse);
     }

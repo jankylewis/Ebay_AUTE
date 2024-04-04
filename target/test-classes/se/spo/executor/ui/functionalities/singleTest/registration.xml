@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Onboarding Flows > Registration Tests"
+       parallel="tests"
+       thread-count="6">
+
+    <!--region Unsuccessful signing-up-->
+
+    <test name="SWSIGNUP_06">
+        <classes>
+            <class name="se.spo.gui.onboardingExperience.RegistrationTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserHasSuccessfullySignedUp"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!--endregion-->
+
+    <!--region Unsuccessful signing-up-->
+
+    <test name="SWSIGNUP_01">
+        <classes>
+            <class name="se.spo.gui.onboardingExperience.RegistrationTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserHasUnsuccessfullySignedUpWithInvalidEmailAddress"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSIGNUP_02">
+        <classes>
+            <class name="se.spo.gui.onboardingExperience.RegistrationTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserHasUnsuccessfullySignedUpWithInvalidPassword"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSIGNUP_03">
+        <classes>
+            <class name="se.spo.gui.onboardingExperience.RegistrationTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserHasUnsuccessfullySignedUpWithEmptyCredentials"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSIGNUP_04">
+        <classes>
+            <class name="se.spo.gui.onboardingExperience.RegistrationTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserHasUnsuccessfullySignedUpWithEmptyDateOfBirth"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSIGNUP_05">
+        <classes>
+            <class name="se.spo.gui.onboardingExperience.RegistrationTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserHasUnsuccessfullySignedUpWithFuturisticYear"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!--endregion-->
+
+</suite>

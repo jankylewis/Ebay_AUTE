@@ -237,12 +237,12 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         int respondedStatusCode = errorModel.getStatus();
         String respondedErrorMessage = errorModel.getMessage();
 
-        if (respondedStatusCode == apiConstant.RED_STATUS &&
+        if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
                 Objects.equals(respondedErrorMessage, apiMessageConstant.INVALID_TOKEN_ERROR_MESSAGE)) {
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was successfully matched the expectations: ",
                     "\nStatus code: ",
-                    String.valueOf(apiConstant.RED_STATUS),
+                    String.valueOf(apiConstant.UNAUTHORIZED),
                     "\nError message: ",
                     apiMessageConstant.INVALID_TOKEN_ERROR_MESSAGE
             )));
@@ -252,7 +252,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         else {
             LOGGER.error(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was not matched the expectations :(",
-                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.RED_STATUS), "]",
+                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
                     "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.INVALID_TOKEN_ERROR_MESSAGE, "]"
             )));
 
@@ -272,7 +272,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         int respondedStatusCode = errorModel.getStatus();
         String respondedErrorMessage = errorModel.getMessage();
 
-        if (respondedStatusCode == apiConstant.RED_STATUS &&
+        if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
                 Objects.equals(respondedErrorMessage, apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE)) {
 
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
@@ -282,7 +282,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was successfully matched the expectations: ",
                     "\nStatus code: ",
-                    String.valueOf(apiConstant.RED_STATUS),
+                    String.valueOf(apiConstant.UNAUTHORIZED),
                     "\nError message: ",
                     apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE
             )));
@@ -292,7 +292,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         else {
             LOGGER.error(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was not matched the expectations :(",
-                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.RED_STATUS), "]",
+                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
                     "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE, "]"
             )));
             LOGGER.error("Token's unique id that was expected to be an expired token = " + expiredTokenUniqueId);
@@ -313,13 +313,13 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         int respondedStatusCode = errorModel.getStatus();
         String respondedErrorMessage = errorModel.getMessage();
 
-        if (respondedStatusCode == apiConstant.RED_STATUS &&
+        if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
                 Objects.equals(respondedErrorMessage, apiMessageConstant.NO_TOKEN_PROVIDED)) {
 
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was successfully matched the expectations: ",
                     "\nStatus code: ",
-                    String.valueOf(apiConstant.RED_STATUS),
+                    String.valueOf(apiConstant.UNAUTHORIZED),
                     "\nError message: ",
                     apiMessageConstant.NO_TOKEN_PROVIDED
             )));
@@ -329,7 +329,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         else {
             LOGGER.error(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was not matched the expectations :(",
-                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.RED_STATUS), "]",
+                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
                     "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.NO_TOKEN_PROVIDED, "]"
             )));
 

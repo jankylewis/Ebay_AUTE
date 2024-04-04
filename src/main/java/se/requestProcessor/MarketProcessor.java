@@ -124,7 +124,7 @@ public class MarketProcessor extends BaseProcessor {
 
     public void verifyApiResponded401(@NotNull Response response) {
 
-        if (response.statusCode() == apiConstant.RED_STATUS) {
+        if (response.statusCode() == apiConstant.UNAUTHORIZED) {
 
             ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
 
@@ -142,7 +142,7 @@ public class MarketProcessor extends BaseProcessor {
         }
 
         LOGGER.error("Response status code came different with the expected status code: " +
-                response.statusCode() + " >< " + apiConstant.RED_STATUS);
+                response.statusCode() + " >< " + apiConstant.UNAUTHORIZED);
         verificationWentFailed();
     }
 

@@ -106,7 +106,7 @@ public class RestUtil {
     //endregion
 
     //region Processing requests
-    
+
     public HashMap<RestUtil, Response> sendAuthenticatedRequestWithResponse(
             String expectedToken,
             String requestedUri,

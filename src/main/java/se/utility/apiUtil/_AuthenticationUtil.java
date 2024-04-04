@@ -34,7 +34,9 @@ public class _AuthenticationUtil {
                 _RestUtil.EMethod.POST
         );
 
+        String token =_restUtil.getPropertyValue("access_token");
+        System.out.println(token);
+
         return _restUtil.getPropertyValue("access_token");
     }
-
 }

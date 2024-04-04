@@ -42,6 +42,13 @@ public class _RestUtil {
                 .given()
                 .header("Authorization", "Bearer " + accessToken);
     }
+
+    private void setAccessToken(String expToken) {
+        _requestSpecification
+                .given()
+                .header("Authorization", "Bearer " + expToken);
+    }
+
     private RequestSpecification buildUrlencodedForm(
             @NotNull Collection<Pair<Object, Object>> pairs
     ) {
