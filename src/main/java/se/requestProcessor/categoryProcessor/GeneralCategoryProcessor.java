@@ -4,7 +4,7 @@ import io.restassured.response.Response;
 import org.javatuples.Pair;
 import se.requestProcessor.BaseProcessor;
 import se.utility.StringUtil;
-import se.utility.apiUtil.RestProcessorUtil;
+import se.utility.apiUtil.RestUtil;
 
 import java.util.Arrays;
 
@@ -25,7 +25,7 @@ public class GeneralCategoryProcessor extends BaseProcessor {
                 categoriesBrowsingUri,
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );
 
         return response;
@@ -39,7 +39,7 @@ public class GeneralCategoryProcessor extends BaseProcessor {
                 StringUtil.appendStrings(Arrays.asList(categoriesBrowsingUri, "/", apiFaker.produceFakeUuid().toString())),
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );
 
         return response;

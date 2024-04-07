@@ -7,61 +7,57 @@ import io.restassured.specification.RequestSpecification;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.google.gson.Gson;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 
 public class RestUtil {
 
-    //region Processing RestUtil instance
-
-    protected static final RestUtil INSTANCE = getInstance();
+    //region Introducing constructors
 
     public RestUtil() {}
-
-    public static RestUtil getInstance() {
-        return RestUtilHelper._INSTANCE;
-    }
-
-    private static final class RestUtilHelper {
-        private static final RestUtil _INSTANCE = new RestUtil();
-    }
 
     //endregion
 
     //region Introducing variables
 
     private RequestSpecification _requestSpecification;
-    private Response response;
-    private String _requestedUri;
-    private JsonPath jsonPath;
-    private Gson gson;
+    private Response _response;
+    private JsonPath _jsonPath;
+
+    private AuthenticationService _authenticationProcessor;
+
+    private String _requestUri;
 
     //endregion
 
-    //Handling Thread Local to Http Client Request
+    //region Initializing class
+
     {
         _requestSpecification = given();
+        _authenticationProcessor = new AuthenticationService();
     }
 
-    private RestUtil setRequestedUri(String requestedUri) {
-        _requestedUri = requestedUri;
-        return INSTANCE;
+    //endregion
+
+    //region Assigning request uri
+
+    private String setRequestUri(String requestUri) {
+        return _requestUri = requestUri;
     }
+
+    //endregion
 
     //region Processing payloads
 
-    private RequestSpecification buildUrlencodedForm(
-            @NotNull Collection<Pair<Object, Object>> pairs
-    ) {
+    private RequestSpecification buildUrlencodedForm(@NotNull Collection<Pair<Object, Object>> pairs) {
 
-        Collection<Pair<Object, Object>> unmodifiablePairs =
-                Collections.unmodifiableCollection(pairs);
+        Collection<Pair<Object, Object>> unmodifiablePairs = Collections.unmodifiableCollection(pairs);
 
         for (Pair<?, ?> pair : unmodifiablePairs) {
-
             String name = pair.getValue0().toString();
             String value = pair.getValue1().toString();
 
@@ -73,232 +69,182 @@ public class RestUtil {
 
     //endregion
 
-    //region Methods' sending services
+    //region Services for sending requests
 
     private Response sendGetRequest() {
-        return response = _requestSpecification.get(_requestedUri);
+        return _response = _requestSpecification.get(_requestUri);
     }
 
     private Response sendPostRequest() {
-        return response = _requestSpecification.post(_requestedUri);
+        return _response = _requestSpecification.post(_requestUri);
     }
 
     private Response sendPatchRequest() {
-        return response = _requestSpecification.patch(_requestedUri);
+        return _response = _requestSpecification.patch(_requestUri);
     }
 
     private Response sendHeadRequest() {
-        return response = _requestSpecification.head(_requestedUri);
+        return _response = _requestSpecification.head(_requestUri);
     }
 
     private Response sendOptionsRequest() {
-        return response = _requestSpecification.options(_requestedUri);
+        return _response = _requestSpecification.options(_requestUri);
     }
 
     private Response sendPutRequest() {
-        return response = _requestSpecification.put(_requestedUri);
+        return _response = _requestSpecification.get(_requestUri);
     }
 
     private Response sendDeleteRequest() {
-        return response = _requestSpecification.delete(_requestedUri);
-    }
-
-    //endregion
-
-    //region Processing requests
-
-    public HashMap<RestUtil, Response> sendAuthenticatedRequestWithResponse(
-            String expectedToken,
-            String requestedUri,
-            @Nullable Collection<Pair<Object, Object>> requestedBody,
-            @Nullable ContentType requestedContentType,
-            EMethod requestedMethod
-    ) {
-
-        setAccessToken(expectedToken);
-
-        setRequestedUri(requestedUri);
-
-        //Invoking a requested body if needed
-        if (requestedContentType != null && requestedBody != null) {
-            switch (requestedContentType) {
-                case URLENC -> buildUrlencodedForm(requestedBody);
-            }
-        }
-
-        switch (requestedMethod) {
-            case GET -> sendGetRequest();
-            case POST -> sendPostRequest();
-            case PUT -> sendPutRequest();
-            case HEAD -> sendHeadRequest();
-            case PATCH -> sendPatchRequest();
-            case DELETE -> sendDeleteRequest();
-            case OPTIONS -> sendOptionsRequest();
-        }
-        return new HashMap<>(){{
-            put(INSTANCE, response);
-        }};
-    }
-
-    public HashMap<RestUtil, Response> sendAuthenticatedRequestWithResponse(
-            String requestedUri,
-            @Nullable Collection<Pair<Object, Object>> requestedBody,
-            @Nullable ContentType requestedContentType,
-            EMethod requestedMethod
-    ) {
-
-        setAccessToken();
-
-        setRequestedUri(requestedUri);
-
-        //Invoking a requested body if needed
-        if (requestedContentType != null && requestedBody != null) {
-            switch (requestedContentType) {
-                case URLENC -> buildUrlencodedForm(requestedBody);
-            }
-        }
-
-        switch (requestedMethod) {
-            case GET -> sendGetRequest();
-            case POST -> sendPostRequest();
-            case PUT -> sendPutRequest();
-            case HEAD -> sendHeadRequest();
-            case PATCH -> sendPatchRequest();
-            case DELETE -> sendDeleteRequest();
-            case OPTIONS -> sendOptionsRequest();
-        }
-        return new HashMap<>(){{
-            put(INSTANCE, response);
-        }};
-    }
-
-    public RestUtil sendBasicRequest(
-            String requestedUri,
-            @Nullable Collection<Pair<Object, Object>> requestedBody,
-            @Nullable ContentType requestedContentType,
-            EMethod requestedMethod
-            ) {
-
-        setRequestedUri(requestedUri);
-
-        //Invoking a requested body if needed
-        if (requestedContentType != null && requestedBody != null) {
-            switch (requestedContentType) {
-                case URLENC -> buildUrlencodedForm(requestedBody);
-            }
-        }
-
-        switch (requestedMethod) {
-            case GET -> sendGetRequest();
-            case POST -> sendPostRequest();
-            case PUT -> sendPutRequest();
-            case HEAD -> sendHeadRequest();
-            case PATCH -> sendPatchRequest();
-            case DELETE -> sendDeleteRequest();
-            case OPTIONS -> sendOptionsRequest();
-        }
-
-        return INSTANCE;
-    }
-
-    public HashMap<RestUtil, Response> sendBasicRequestWithResponse(
-            String requestedUri,
-            @Nullable Collection<Pair<Object, Object>> requestedBody,
-            @Nullable ContentType requestedContentType,
-            EMethod requestedMethod
-    ) {
-
-        setRequestedUri(requestedUri);
-
-        //Invoking a requested body if needed
-        if (requestedContentType != null && requestedBody != null) {
-            switch (requestedContentType) {
-                case URLENC -> buildUrlencodedForm(requestedBody);
-            }
-        }
-
-        switch (requestedMethod) {
-            case GET -> sendGetRequest();
-            case POST -> sendPostRequest();
-            case PUT -> sendPutRequest();
-            case HEAD -> sendHeadRequest();
-            case PATCH -> sendPatchRequest();
-            case DELETE -> sendDeleteRequest();
-            case OPTIONS -> sendOptionsRequest();
-        }
-
-        return new HashMap<>(){{
-            put(INSTANCE, response);
-        }};
-    }
-
-    public RestUtil sendAuthenticatedRequest(
-            String requestedUri,
-            @Nullable Collection<Pair<Object, Object>> requestedBody,
-            @Nullable ContentType requestedContentType,
-            EMethod requestedMethod
-    ) {
-
-        setAccessToken();
-
-        setRequestedUri(requestedUri);
-
-        //Invoking a requested body if needed
-        if (requestedContentType != null && requestedBody != null) {
-            switch (requestedContentType) {
-                case URLENC -> buildUrlencodedForm(requestedBody);
-            }
-        }
-
-        switch (requestedMethod) {
-            case GET -> sendGetRequest();
-            case POST -> sendPostRequest();
-            case PUT -> sendPutRequest();
-            case HEAD -> sendHeadRequest();
-            case PATCH -> sendPatchRequest();
-            case DELETE -> sendDeleteRequest();
-            case OPTIONS -> sendOptionsRequest();
-        }
-
-        return INSTANCE;
+        return _response = _requestSpecification.delete(_requestUri);
     }
 
     //endregion
 
     //region Processing tokens
 
-    private RestUtil setAccessToken() {
+    private String setAccessToken() {
 
-        String accessToken = AuthenticationService.getAccessToken();
+        String accessToken = _authenticationProcessor.getAccessToken();
 
         _requestSpecification
                 .given()
                 .header("Authorization", "Bearer " + accessToken);
 
-        return INSTANCE;
+        return accessToken;
     }
 
-    private RestUtil setAccessToken(String expectedToken) {
+    private String setAccessToken(String expectedToken) {
 
         _requestSpecification
                 .given()
                 .header("Authorization", "Bearer " + expectedToken);
 
-        return INSTANCE;
+        return expectedToken;
     }
+
+    //endregion
+
+    //region Processing requests
+
+    //region Sending with a desired token
+
+    public HashMap<?, Response> sendAuthenticatedRequestWithResponse(
+            String expectedToken,
+            String requestUri,
+            @Nullable Collection<Pair<Object, Object>> requestBody,
+            @Nullable ContentType requestContentType,
+            EMethod requestMethod
+            ) {
+
+        setAccessToken(expectedToken);
+
+        setRequestUri(requestUri);
+
+        //Invoking a requested body if needed
+        if (requestContentType != null && requestBody != null) {
+            switch (requestContentType) {
+                case URLENC -> buildUrlencodedForm(requestBody);
+            }
+        }
+
+        switch (requestMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+            case PUT -> sendPutRequest();
+            case HEAD -> sendHeadRequest();
+            case PATCH -> sendPatchRequest();
+            case DELETE -> sendDeleteRequest();
+            case OPTIONS -> sendOptionsRequest();
+        }
+
+        return new HashMap<>(){{
+            put(expectedToken, _response);
+        }};
+    }
+
+    //endregion
+
+    //region Sending with an authenticated token
+
+    public Response sendAuthenticatedRequestWithResponse(
+            String requestUri,
+            @Nullable Collection<Pair<Object, Object>> requestBody,
+            @Nullable ContentType requestContentType,
+            EMethod requestMethod
+    ) {
+
+        setAccessToken();
+
+        setRequestUri(requestUri);
+
+        //Invoking a requested body if needed
+        if (requestContentType != null && requestBody != null) {
+            switch (requestContentType) {
+                case URLENC -> buildUrlencodedForm(requestBody);
+            }
+        }
+
+        switch (requestMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+            case PUT -> sendPutRequest();
+            case HEAD -> sendHeadRequest();
+            case PATCH -> sendPatchRequest();
+            case DELETE -> sendDeleteRequest();
+            case OPTIONS -> sendOptionsRequest();
+        }
+
+        return _response;
+    }
+
+    //endregion
+
+    //region Sending a basic request
+
+    public Response sendBasicRequest(
+            String requestUri,
+            @Nullable Collection<Pair<Object, Object>> requestBody,
+            @Nullable ContentType requestContentType,
+            EMethod requestMethod
+    ) {
+
+        setRequestUri(requestUri);
+
+        //Invoking a request body if needed
+        if (requestContentType != null && requestBody != null) {
+            switch (requestContentType) {
+                case URLENC -> buildUrlencodedForm(requestBody);
+            }
+        }
+
+        switch (requestMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+            case PUT -> sendPutRequest();
+            case HEAD -> sendHeadRequest();
+            case PATCH -> sendPatchRequest();
+            case DELETE -> sendDeleteRequest();
+            case OPTIONS -> sendOptionsRequest();
+        };
+
+        return _response;
+    }
+
+    //endregion
 
     //endregion
 
     //region Processing responses
 
     protected String getPropertyValue(String property) {
-        jsonPath = new JsonPath(response.asPrettyString());
-        return jsonPath.get(property);
+        _jsonPath = new JsonPath(_response.asPrettyString());
+        return _jsonPath.get(property);
     }
 
     //endregion
 
-    //region API methods
+    //region Listing API methods
 
     public enum EMethod {
         GET,

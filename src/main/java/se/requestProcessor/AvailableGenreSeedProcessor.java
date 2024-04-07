@@ -9,7 +9,7 @@ import se.utility.GlobalVariableUtil;
 import se.utility.JUtil;
 import se.utility.JUtil.MapUtil;
 import se.utility.StringUtil;
-import se.utility.apiUtil.RestProcessorUtil;
+import se.utility.apiUtil.RestUtil;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
                 getAvailableGenreSeedUri,
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );
 
         return response;
@@ -47,7 +47,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
                 getAvailableGenreSeedUri,
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );
 
         return response.get(dummyToken);
@@ -60,7 +60,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
                 getAvailableGenreSeedUri,
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );
 
         return response;

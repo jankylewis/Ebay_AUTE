@@ -10,7 +10,6 @@ import se.spo.api.testDataProvider.TestDataFactory;
 import se.spo.api.testDataProvider.TestDataFactory.AvailableGenreSeedDataProvider;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class AvailableGenreSeedTest extends BaseApiTestService {
@@ -134,10 +133,12 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
 
         Collection<Pair<String, String>> unmodifiableTokens =
                 Collections.unmodifiableCollection((Collection<Pair<String, String>>)
-                                TestDataFactory.INSTANCE.
-                                        prepareModifiableTokensWithCsv(new Object() {}.getClass().getEnclosingMethod()));
+                        TestDataFactory
+                                .INSTANCE
+                                .prepareModifiableTokensWithCsv(new Object() {}.getClass().getEnclosingMethod()));
 
         for (int idx = 0; idx < unmodifiableTokens.size(); idx++) {
+
             Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed("");
 
             availableGenreSeedProcessor.verifyUnsupportedAuthenticationServiceErrorMessageResponded(

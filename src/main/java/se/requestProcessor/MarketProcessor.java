@@ -6,37 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import se.model.apiModel.responseModel.ErrorMessageModel;
 import se.utility.apiUtil.RestUtil;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MarketProcessor extends BaseProcessor {
 
-    //region Introducing constructors
-
-    private MarketProcessor() {
+    public MarketProcessor() {
         super();
     }
-
-    private MarketProcessor(RestUtil restUtil) {
-        super(restUtil);
-    }
-
-    //endregion
-
-    //region Handling instance
-
-    public static final MarketProcessor INSTANCE = getInstance();
-
-    private static MarketProcessor getInstance() {
-        _requestProcessor = RestUtil.getInstance();
-        return MarketProcessorHelper.INSTANCE;
-    }
-
-    private static final class MarketProcessorHelper {
-        private static final MarketProcessor INSTANCE = new MarketProcessor();
-    }
-
-    //endregion
 
     //region URIs
 
@@ -46,35 +23,33 @@ public class MarketProcessor extends BaseProcessor {
 
     //region Making requests
 
-    public Pair<MarketProcessor, Response> getMarketsWithNormalUri() {       //Normal request
+    public Response getMarketsWithNormalUri() {       //Normal request
 
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
             marketBrowsingUri,
                 null,
                 null,
                 RestUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response;
     }
 
-    public Pair<MarketProcessor, Response> getMarketsWithNormalUri(String abnormalSuffix) {       //Abnormal request
+    public Response getMarketsWithNormalUri(String abnormalSuffix) {       //Abnormal request
 
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 marketBrowsingUri + "/" + abnormalSuffix,
                 null,
                 null,
                 RestUtil.EMethod.GET
         );
 
-        System.out.println("_  " + _requestProcessor.hashCode());
-
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response;
     }
 
-    public Pair<MarketProcessor, Response> getMarketsWithExpiredToken(String expiredToken) {
+    public Response getMarketsWithExpiredToken(String expiredToken) {
 
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Map<?, Response> responseMap = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 expiredToken,
                 marketBrowsingUri,
                 null,
@@ -82,9 +57,7 @@ public class MarketProcessor extends BaseProcessor {
                 RestUtil.EMethod.GET
         );
 
-        System.out.println("_  " + _requestProcessor.hashCode());
-
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return responseMap.get(expiredToken);
     }
 
     //endregion

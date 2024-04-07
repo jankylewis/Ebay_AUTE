@@ -9,27 +9,30 @@ import java.util.List;
 
 public class AuthenticationService {
 
-    private static final RestUtil REST_UTIL = RestUtil.INSTANCE;
-    private static final String AUTHENTICATION_URI = "https://accounts.spotify.com/api/token";
+    protected AuthenticationService(){}
 
-    protected static String getAccessToken() {
+    private static final String AUTHENTICATION_URI = "https://accounts.spotify.com/api/token";
+    private RestUtil _restProcessorUtil;
+
+    protected String getAccessToken() {
+
+        _restProcessorUtil = new RestUtil();
 
         AuthenticationModel authenticationModel = new AuthenticationModel();
 
-        Collection<Pair<Object, Object>> requestedForm =
-                List.of(
-                        Pair.with("grant_type", authenticationModel.getGrantType()),
-                        Pair.with("client_id", authenticationModel.getClientId()),
-                        Pair.with("client_secret", authenticationModel.getClientSecret())
-                );
+        Collection<Pair<Object, Object>> requestForm = List.of(
+                Pair.with("grant_type", authenticationModel.getGrantType()),
+                Pair.with("client_id", authenticationModel.getClientId()),
+                Pair.with("client_secret", authenticationModel.getClientSecret())
+        );
 
-        REST_UTIL.sendBasicRequest(
+        _restProcessorUtil.sendBasicRequest(
                 AUTHENTICATION_URI,
-                requestedForm,
+                requestForm,
                 ContentType.URLENC,
                 RestUtil.EMethod.POST
         );
 
-        return REST_UTIL.getPropertyValue("access_token");
+        return _restProcessorUtil.getPropertyValue("access_token");
     }
 }

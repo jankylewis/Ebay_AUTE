@@ -3,7 +3,7 @@ package se.requestProcessor.categoryProcessor;
 import io.restassured.response.Response;
 import org.javatuples.Pair;
 import se.requestProcessor.BaseProcessor;
-import se.utility.apiUtil.RestProcessorUtil;
+import se.utility.apiUtil.RestUtil;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class SingleCategoryProcessor extends BaseProcessor {
                 baseSingleCategoryBrowsingUri + expCategory,
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );
 
         return apiResponse;
@@ -34,7 +34,7 @@ public class SingleCategoryProcessor extends BaseProcessor {
                 baseSingleCategoryBrowsingUri + expCategory,
                 null,
                 null,
-                RestProcessorUtil.EMethod.GET
+                RestUtil.EMethod.GET
         );;
 
         return responseMap.get(expToken);

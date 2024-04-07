@@ -7,7 +7,6 @@ import se.commonHandler.baseService.BaseApiService;
 import se.commonHandler.baseService.BaseVerification.IVerification;
 import se.commonHandler.constantHouse.apiConstant.ApiConstant;
 import se.commonHandler.constantHouse.apiConstant.ApiMessageConstant;
-import se.utility.apiUtil.RestProcessorUtil;
 import se.utility.apiUtil.RestUtil;
 
 public class BaseProcessor extends BaseApiService implements IVerification {
@@ -17,19 +16,13 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
     protected ApiConstant apiConstant;
     protected ApiMessageConstant apiMessageConstant;
-
-    protected static RestUtil _requestProcessor;
-
-    protected RestProcessorUtil _restProcessorUtil;
+    protected RestUtil _restProcessorUtil;
 
     //region Generating an instance
 
     protected BaseProcessor() {}
-    protected BaseProcessor(RestUtil requestProcessor) {
-        _requestProcessor = requestProcessor;
-    }
 
-    protected BaseProcessor(RestProcessorUtil restProcessorUtil){
+    protected BaseProcessor(RestUtil restProcessorUtil){
         _restProcessorUtil = restProcessorUtil;
     }
 
@@ -41,7 +34,7 @@ public class BaseProcessor extends BaseApiService implements IVerification {
         apiConstant = new ApiConstant();
         apiMessageConstant = new ApiMessageConstant();
 
-        _restProcessorUtil = new RestProcessorUtil();
+        _restProcessorUtil = new RestUtil();
     }
 
     //endregion
