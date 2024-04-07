@@ -1,14 +1,14 @@
 package se.spo.api.categoryBrowsingTest;
 
 import io.restassured.response.Response;
-import org.javatuples.Pair;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.requestProcessor.categoryProcessor.GeneralCategoryProcessor;
 import se.spo.api.BaseApiTestService;
 
 public class GeneralCategoryBrowsingTest extends BaseApiTestService {
 
-    private GeneralCategoryProcessor browseCategoryProcessor = GeneralCategoryProcessor.INSTANCE;
+    private GeneralCategoryProcessor browseCategoryProcessor;
 
     @Test(
             priority = 2,
@@ -17,8 +17,8 @@ public class GeneralCategoryBrowsingTest extends BaseApiTestService {
             groups = "singleThreaded"
     )
     protected void spotifyApiTest_VerifyApiProcessedRequestWithGreenResponseCode() {
-        Pair<GeneralCategoryProcessor, Response> dataRetrieved = browseCategoryProcessor.getBrowseCategoriesSuccessfully();
-        browseCategoryProcessor.verifyBrowseCategoriesRequestResponseSttCode(dataRetrieved.getValue1());
+        Response dataRetrieved = browseCategoryProcessor.getBrowseCategoriesSuccessfully();
+        browseCategoryProcessor.verifyBrowseCategoriesRequestResponseSttCode(dataRetrieved);
     }
 
     @Test(
@@ -27,7 +27,12 @@ public class GeneralCategoryBrowsingTest extends BaseApiTestService {
             description = "Verify Api was UNSUCCESSFULLY processed when being hit by a request"
     )
     protected void spotifyApiTest_VerifyApiProcessedRequestWithBadResponseCode() {
-        Pair<GeneralCategoryProcessor, Response> dataRetrieved = browseCategoryProcessor.getBrowseCategoriesUnsuccessfully();
-        browseCategoryProcessor.verifyBrowseCategoriesRequestResponseSttCode(dataRetrieved.getValue1());
+        Response dataRetrieved = browseCategoryProcessor.getBrowseCategoriesUnsuccessfully();
+        browseCategoryProcessor.verifyBrowseCategoriesRequestRespondedWith404SttCode(dataRetrieved);
+    }
+
+    @BeforeMethod
+    protected void testPreparation() {
+        browseCategoryProcessor = new GeneralCategoryProcessor();
     }
 }

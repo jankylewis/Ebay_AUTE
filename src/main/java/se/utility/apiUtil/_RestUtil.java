@@ -100,6 +100,32 @@ public class _RestUtil {
         return response;
     }
 
+    public Response sendAuthenticatedRequestWithResponse(
+            String expToken,
+            String requestedUri,
+            @Nullable Collection<Pair<Object, Object>> requestedBody,
+            @Nullable ContentType requestedContentType,
+            EMethod requestedMethod
+    ) {
+
+        setAccessToken(expToken);
+
+        setRequestedUri(requestedUri);
+
+        //Invoking a requested body if needed
+        if (requestedContentType != null && requestedBody != null) {
+            switch (requestedContentType) {
+                case URLENC -> buildUrlencodedForm(requestedBody);
+            }
+        }
+
+        switch (requestedMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+        }
+        return response;
+    }
+
     public void sendBasicRequest(
             String requestedUri,
             @Nullable Collection<Pair<Object, Object>> requestedBody,

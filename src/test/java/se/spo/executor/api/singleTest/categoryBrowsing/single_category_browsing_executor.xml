@@ -3,7 +3,7 @@
 
 <suite name="API Test > Category Browsing Tests"
        parallel="tests"
-       thread-count="6">
+       thread-count="3">
 
     <test name="SASINGLEBROWSECATEGORIES_01">
         <classes>
@@ -15,51 +15,21 @@
         </classes>
     </test>
 
-    <test name="SASINGLEBROWSECATEGORIES_02">
+    <test name="SASINGLEBROWSECATEGORIES_07">
         <classes>
             <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
                 <methods>
-                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully1"></include>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestWithInvalidAccessToken"></include>
                 </methods>
             </class>
         </classes>
     </test>
 
-    <test name="SASINGLEBROWSECATEGORIES_03">
+    <test name="SASINGLEBROWSECATEGORIES_08">
         <classes>
             <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
                 <methods>
-                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully2"></include>
-                </methods>
-            </class>
-        </classes>
-    </test>
-
-    <test name="SASINGLEBROWSECATEGORIES_04">
-        <classes>
-            <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
-                <methods>
-                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully3"></include>
-                </methods>
-            </class>
-        </classes>
-    </test>
-
-    <test name="SASINGLEBROWSECATEGORIES_05">
-        <classes>
-            <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
-                <methods>
-                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully4"></include>
-                </methods>
-            </class>
-        </classes>
-    </test>
-
-    <test name="SASINGLEBROWSECATEGORIES_06">
-        <classes>
-            <class name="se.spo.api.categoryBrowsingTest.SingleCategoryBrowsingTest">
-                <methods>
-                    <include name="spotifyApiTest_VerifyApiProcessedRequestSuccessfully5"></include>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestWithNoTokenProvided"></include>
                 </methods>
             </class>
         </classes>

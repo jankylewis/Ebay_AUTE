@@ -3,37 +3,37 @@
 
 <suite name="API Test > Available Genre Seed Tests"
        parallel="tests"
-       thread-count="1">        <!-- Parallel running is not allowed here -->
+       thread-count="20">
 
-<!--    <test name="SAAVAILABLEGENRESEED_03">-->
-<!--        <classes>-->
-<!--            <class name="se.spo.api.AvailableGenreSeedTest">-->
-<!--                <methods>-->
-<!--                    <include name="spotifyApiTest_VerifySeveralAvailableGenreSeedsWillBeListed"></include>-->
-<!--                </methods>-->
-<!--            </class>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="SAAVAILABLEGENRESEED_03">
+        <classes>
+            <class name="se.spo.api.AvailableGenreSeedTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifySeveralAvailableGenreSeedsWillBeListed"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
 
-<!--    <test name="SAAVAILABLEGENRESEED_02">-->
-<!--        <classes>-->
-<!--            <class name="se.spo.api.AvailableGenreSeedTest">-->
-<!--                <methods>-->
-<!--                    <include name="spotifyApiTest_VerifyRespondedListMatchedAccuratelyExpectedList"></include>-->
-<!--                </methods>-->
-<!--            </class>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="SAAVAILABLEGENRESEED_02">
+        <classes>
+            <class name="se.spo.api.AvailableGenreSeedTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyRespondedListMatchedAccuratelyExpectedList"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
 
-<!--    <test name="SAAVAILABLEGENRESEED_01">-->
-<!--        <classes>-->
-<!--            <class name="se.spo.api.AvailableGenreSeedTest">-->
-<!--                <methods>-->
-<!--                    <include name="spotifyApiTest_VerifyGospelTypeWasPresentedInTheResponse"></include>-->
-<!--                </methods>-->
-<!--            </class>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="SAAVAILABLEGENRESEED_01">
+        <classes>
+            <class name="se.spo.api.AvailableGenreSeedTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyGospelTypeWasPresentedInTheResponse"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
 
     <!-- region Edge cases -->
 
@@ -47,15 +47,15 @@
         </classes>
     </test>
 
-<!--    <test name="SAAVAILABLEGENRESEED_05">-->
-<!--        <classes>-->
-<!--            <class name="se.spo.api.AvailableGenreSeedTest">-->
-<!--                <methods>-->
-<!--                    <include name="spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated"></include>-->
-<!--                </methods>-->
-<!--            </class>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="SAAVAILABLEGENRESEED_05">
+        <classes>
+            <class name="se.spo.api.AvailableGenreSeedTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
 
     <test name="SAAVAILABLEGENRESEED_06">
         <classes>

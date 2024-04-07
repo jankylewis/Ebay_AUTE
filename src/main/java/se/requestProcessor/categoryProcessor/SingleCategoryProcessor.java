@@ -3,31 +3,46 @@ package se.requestProcessor.categoryProcessor;
 import io.restassured.response.Response;
 import org.javatuples.Pair;
 import se.requestProcessor.BaseProcessor;
-import se.utility.apiUtil._RestUtil;
+import se.utility.apiUtil.RestProcessorUtil;
+
+import java.util.Map;
 
 public class SingleCategoryProcessor extends BaseProcessor {
 
-    //This classes being created for testing purposes
     public SingleCategoryProcessor(){}
 
     private final String baseSingleCategoryBrowsingUri = "https://api.spotify.com/v1/browse/categories/";
-    private final _RestUtil _restUtil = new _RestUtil();
+
+    //region Processing API requests
 
     public Response getSingleCategoriesSuccessfully(String expCategory) {
 
-//        _restUtil = new _RestUtil();
-
-        Response apiResponse = _restUtil.sendAuthenticatedRequestWithResponse(
+        Response apiResponse = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 baseSingleCategoryBrowsingUri + expCategory,
                 null,
                 null,
-                _RestUtil.EMethod.GET
+                RestProcessorUtil.EMethod.GET
         );
-
-        System.out.println(_restUtil.hashCode());
 
         return apiResponse;
     }
+
+    public Response getSingleCategoriesWithInvalidAccessToken(String expCategory, String expToken) {
+
+        Map<?, Response> responseMap = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+                expToken,
+                baseSingleCategoryBrowsingUri + expCategory,
+                null,
+                null,
+                RestProcessorUtil.EMethod.GET
+        );;
+
+        return responseMap.get(expToken);
+    }
+
+    //endregion
+
+    //region Verifying requests
 
     public void verifySingleBrowseCategoryApiRespondedGreenly(Response response) {
 
@@ -48,6 +63,7 @@ public class SingleCategoryProcessor extends BaseProcessor {
         Pair<Boolean, Integer> result = verifyApiThrownErrorWithInvalidAccessToken(response);
 
         if (result.getValue0()) {
+            LOGGER.info("Actual status code equals Expected status code: " + result.getValue1() + " >< " + apiConstant.UNAUTHORIZED);
             verificationWentPassed();
         }
         else {
@@ -56,4 +72,25 @@ public class SingleCategoryProcessor extends BaseProcessor {
             verificationWentFailed();
         }
     }
+
+    public void verifyUserWasNotAuthenticatedWhenNoTokenProvided(Response response) {
+
+        Pair<Boolean, Integer> result = verifyResponseStatusCodeWent401(response);
+
+        if (result.getValue0()) {
+            LOGGER.info("Actual status code equals Expected status code: "
+                    + result.getValue1() + " >< " + apiConstant.UNSUPPORTED_AUTHENTICATION_SERVICE);
+
+            verificationWentPassed();
+        }
+        else {
+            LOGGER.error("Response status code came different with the expected status code! ");
+            LOGGER.info("Actual status code >< Expected status code: "
+                    + result.getValue1() + " >< " + apiConstant.UNSUPPORTED_AUTHENTICATION_SERVICE);
+
+            verificationWentFailed();
+        }
+    }
+
+    //endregion
 }

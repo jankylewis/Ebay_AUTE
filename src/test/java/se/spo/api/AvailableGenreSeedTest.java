@@ -3,28 +3,29 @@ package se.spo.api;
 import io.restassured.response.Response;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.requestProcessor.AvailableGenreSeedProcessor;
 import se.spo.api.testDataProvider.TestDataFactory;
 import se.spo.api.testDataProvider.TestDataFactory.AvailableGenreSeedDataProvider;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
-@Test(singleThreaded = true)        //This test class will be single-threadedly executed
 public class AvailableGenreSeedTest extends BaseApiTestService {
 
-    private AvailableGenreSeedProcessor availableGenreSeedProcessor = AvailableGenreSeedProcessor.INSTANCE;
+    private AvailableGenreSeedProcessor availableGenreSeedProcessor;
 
     @Test(
             priority = 2,
             testName = "SAAVAILABLEGENRESEED_01",
             description = "Verify Gospel type was included in the response when User made a request"
     )
-    protected synchronized void spotifyApiTest_VerifyGospelTypeWasPresentedInTheResponse() {
+    protected void spotifyApiTest_VerifyGospelTypeWasPresentedInTheResponse() {
         final String genreType = "Gospel";
-        Pair<AvailableGenreSeedProcessor, Response> dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed();
-        availableGenreSeedProcessor.verifyGenreWasPresentedInTheListOfAvailableGenreSeeds(dataResponded.getValue1(), genreType);
+        Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed();
+        availableGenreSeedProcessor.verifyGenreWasPresentedInTheListOfAvailableGenreSeeds(dataResponded, genreType);
     }
 
     @Test(
@@ -34,14 +35,14 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
             dataProvider = "AvailableGenreSeedsProvider",
             dataProviderClass = AvailableGenreSeedDataProvider.class
     )
-    protected synchronized void spotifyApiTest_VerifyRespondedListMatchedAccuratelyExpectedList(
+    protected void spotifyApiTest_VerifyRespondedListMatchedAccuratelyExpectedList(
             @NotNull Hashtable availableGenreSeedsHashTable
     ) {
         //Making a request headed toward getting available genre seeds API
-        Pair<AvailableGenreSeedProcessor, Response> dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed();
+        Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed();
 
         availableGenreSeedProcessor.verifyTheExpectedListMatchedAccuratelyTheRespondedList(
-                dataResponded.getValue1(),
+                dataResponded,
                 availableGenreSeedsHashTable
         );
     }
@@ -53,15 +54,15 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
             dataProvider = "AvailableGenreSeedsProvider",
             dataProviderClass = AvailableGenreSeedDataProvider.class
     )
-    protected synchronized void spotifyApiTest_VerifySeveralAvailableGenreSeedsWillBeListed(
+    protected void spotifyApiTest_VerifySeveralAvailableGenreSeedsWillBeListed(
             @NotNull Hashtable availableGenreSeedsHashTable
     ) {
         //Making a request headed toward getting available genre seeds API
-        Pair<AvailableGenreSeedProcessor, Response> dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed();
+        Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed();
 
         //Verifying the several genres listed in the responded list of genres
         availableGenreSeedProcessor.verifySeveralAvailableGenreSeedsListedInRespondedList(
-                dataResponded.getValue1(), availableGenreSeedsHashTable
+                dataResponded, availableGenreSeedsHashTable
         );
     }
 
@@ -72,7 +73,7 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
             dataProviderClass = TestDataFactory.class,
             dataProvider = "InvalidTokensProvider"
     )
-    protected synchronized void spotifyApiTest_VerifyTheInvalidTokensWereNotAuthenticated(
+    protected void spotifyApiTest_VerifyTheInvalidTokensWereNotAuthenticated(
             @NotNull List<String> invalidTokens) {
 
         int numberOfTokensProcessed = invalidTokens.size();
@@ -81,12 +82,12 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
         do {
 
             //Making a request headed toward getting available genre seeds API with dummy tokens
-            Pair<AvailableGenreSeedProcessor, Response> dataResponded =
-                    availableGenreSeedProcessor.getAvailableGenreSeed(invalidTokens.get(tokenIdx));
+            Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(invalidTokens.get(tokenIdx));
 
-            dataResponded.getValue0().verifyInvalidTokenErrorMessageResponded(dataResponded.getValue1());
-            tokenIdx++;
+            //Verifying User shall not be authenticated with dummy tokens
+            availableGenreSeedProcessor.verifyInvalidTokenErrorMessageResponded(dataResponded);
 
+            tokenIdx++;         //Index increment
         } while (tokenIdx < numberOfTokensProcessed);
     }
 
@@ -97,15 +98,13 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
             dataProviderClass = TestDataFactory.class,
             dataProvider = "ExpiredTokensProvider"
     )
-    protected synchronized void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated(
+    protected void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated(
             @NotNull Pair<String, String> expiredTokens) {
 
         //Making a request headed toward getting available genre seeds API with an expired token
-        Pair<AvailableGenreSeedProcessor, Response> dataResponded =
-                availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());
+        Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());
 
-        dataResponded.getValue0()
-                .verifyExpiredTokenErrorMessageResponded(dataResponded.getValue1(), expiredTokens.getValue0());
+        availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded(dataResponded, expiredTokens.getValue0());
     }
 
     @Test(
@@ -113,17 +112,16 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
             testName = "SAAVAILABLEGENRESEED_06",
             description = "Verify that Api responded a certain error if there was no token provided"
     )
-    protected synchronized void spotifyApiTest_VerifyApiThrewErrorIfNoTokenProvided() throws IOException {
+    protected void spotifyApiTest_VerifyApiThrewErrorIfNoTokenProvided() throws IOException {
 
         //Generating an empty HashSet
         TestDataFactory.INSTANCE.prepareModifiableTokensWithCsv(
                 new Object() {}.getClass().getEnclosingMethod());
 
-        Pair<AvailableGenreSeedProcessor, Response> dataResponded =
+        Response dataResponded =
                 availableGenreSeedProcessor.getAvailableGenreSeedWithBasicRequest();
 
-        dataResponded.getValue0()
-                .verifyNoneOfTokenProvidedErrorMessageResponded(dataResponded.getValue1());
+        availableGenreSeedProcessor.verifyNoneOfTokenProvidedErrorMessageResponded(dataResponded);
     }
 
     @Test(
@@ -131,7 +129,7 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
             testName = "SAAVAILABLEGENRESEED_07",
             description = "Verify that Api rejected when User requested other authentication services"
     )
-    protected synchronized void spotifyApiTest_VerifyApiRejectedIfUserRequestedAnotherAuthenticationService()
+    protected void spotifyApiTest_VerifyApiRejectedIfUserRequestedAnotherAuthenticationService()
             throws IOException {
 
         Collection<Pair<String, String>> unmodifiableTokens =
@@ -140,11 +138,15 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
                                         prepareModifiableTokensWithCsv(new Object() {}.getClass().getEnclosingMethod()));
 
         for (int idx = 0; idx < unmodifiableTokens.size(); idx++) {
-            Pair<AvailableGenreSeedProcessor, Response> dataResponded =
-                    availableGenreSeedProcessor.getAvailableGenreSeed("");
-            dataResponded.getValue0()
-                    .verifyUnsupportedAuthenticationServiceErrorMessageResponded(
-                            unmodifiableTokens.stream().toList().get(idx), dataResponded.getValue1());
+            Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed("");
+
+            availableGenreSeedProcessor.verifyUnsupportedAuthenticationServiceErrorMessageResponded(
+                    unmodifiableTokens.stream().toList().get(idx), dataResponded);
         }
+    }
+
+    @BeforeMethod
+    protected void testPreparation() {
+        availableGenreSeedProcessor = new AvailableGenreSeedProcessor();
     }
 }

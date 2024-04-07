@@ -7,6 +7,7 @@ import se.commonHandler.baseService.BaseApiService;
 import se.commonHandler.baseService.BaseVerification.IVerification;
 import se.commonHandler.constantHouse.apiConstant.ApiConstant;
 import se.commonHandler.constantHouse.apiConstant.ApiMessageConstant;
+import se.utility.apiUtil.RestProcessorUtil;
 import se.utility.apiUtil.RestUtil;
 
 public class BaseProcessor extends BaseApiService implements IVerification {
@@ -19,11 +20,17 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
     protected static RestUtil _requestProcessor;
 
+    protected RestProcessorUtil _restProcessorUtil;
+
     //region Generating an instance
 
     protected BaseProcessor() {}
     protected BaseProcessor(RestUtil requestProcessor) {
         _requestProcessor = requestProcessor;
+    }
+
+    protected BaseProcessor(RestProcessorUtil restProcessorUtil){
+        _restProcessorUtil = restProcessorUtil;
     }
 
     //endregion
@@ -33,6 +40,8 @@ public class BaseProcessor extends BaseApiService implements IVerification {
     {
         apiConstant = new ApiConstant();
         apiMessageConstant = new ApiMessageConstant();
+
+        _restProcessorUtil = new RestProcessorUtil();
     }
 
     //endregion
@@ -59,6 +68,14 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
         responseStatusCode = response.statusCode();
         responseHealth = responseStatusCode == apiConstant.SERVICE_NOT_FOUND;
+
+        return Pair.with(responseHealth, responseStatusCode);
+    }
+
+    protected Pair<Boolean, Integer> verifyResponseStatusCodeWent401(@NotNull Response response) {
+
+        responseStatusCode = response.statusCode();
+        responseHealth = responseStatusCode == apiConstant.UNSUPPORTED_AUTHENTICATION_SERVICE;
 
         return Pair.with(responseHealth, responseStatusCode);
     }

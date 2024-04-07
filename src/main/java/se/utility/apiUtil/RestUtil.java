@@ -269,7 +269,7 @@ public class RestUtil {
 
     private RestUtil setAccessToken() {
 
-        String accessToken = AuthenticationUtil.getAccessToken();
+        String accessToken = AuthenticationService.getAccessToken();
 
         _requestSpecification
                 .given()

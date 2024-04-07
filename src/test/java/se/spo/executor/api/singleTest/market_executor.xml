@@ -3,7 +3,7 @@
 
 <suite name="API Test > Category Browsing Tests"
        parallel="tests"
-       thread-count="3">
+       thread-count="1">
 
     <!--region Unsuccessful processing-->
 

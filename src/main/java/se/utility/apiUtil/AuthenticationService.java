@@ -7,7 +7,7 @@ import se.model.apiModel.requestModel.AuthenticationModel;
 import java.util.Collection;
 import java.util.List;
 
-public class AuthenticationUtil {
+public class AuthenticationService {
 
     private static final RestUtil REST_UTIL = RestUtil.INSTANCE;
     private static final String AUTHENTICATION_URI = "https://accounts.spotify.com/api/token";

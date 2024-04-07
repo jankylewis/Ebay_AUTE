@@ -9,7 +9,7 @@ import se.utility.GlobalVariableUtil;
 import se.utility.JUtil;
 import se.utility.JUtil.MapUtil;
 import se.utility.StringUtil;
-import se.utility.apiUtil.RestUtil;
+import se.utility.apiUtil.RestProcessorUtil;
 
 import java.util.*;
 
@@ -17,28 +17,8 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
     //region Introducing constructors
 
-    private AvailableGenreSeedProcessor() {
+    public AvailableGenreSeedProcessor() {
         super();
-    }
-
-    private AvailableGenreSeedProcessor(RestUtil restUtil) {
-        super(restUtil);
-    }
-
-    //endregion
-
-    //region Processing an instance
-
-    public static final AvailableGenreSeedProcessor INSTANCE = getInstance();
-
-    private static final class AvailableGenreSeedProcessorHelper {
-        private static final AvailableGenreSeedProcessor _INSTANCE =
-                new AvailableGenreSeedProcessor();
-    }
-
-    private static AvailableGenreSeedProcessor getInstance() {
-        _requestProcessor = RestUtil.getInstance();
-        return AvailableGenreSeedProcessorHelper._INSTANCE;
     }
 
     //endregion
@@ -47,49 +27,50 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
     //region Services regarding API requests
 
-    public synchronized Pair<AvailableGenreSeedProcessor, Response> getAvailableGenreSeed() {
+    public Response getAvailableGenreSeed() {
 
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 getAvailableGenreSeedUri,
                 null,
                 null,
-                RestUtil.EMethod.GET
+                RestProcessorUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response;
     }
 
-    public synchronized Pair<AvailableGenreSeedProcessor, Response> getAvailableGenreSeed(String dummyToken) {
+    public Response getAvailableGenreSeed(String dummyToken) {
 
         //Making request with an expected token
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Map<?, Response> response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 dummyToken,
                 getAvailableGenreSeedUri,
                 null,
                 null,
-                RestUtil.EMethod.GET
+                RestProcessorUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response.get(dummyToken);
     }
 
-    public synchronized Pair<AvailableGenreSeedProcessor, Response> getAvailableGenreSeedWithBasicRequest() {
+    public Response getAvailableGenreSeedWithBasicRequest() {
+
         //Making request with an expected token
-        HashMap<RestUtil, Response> response = _requestProcessor.sendBasicRequestWithResponse(
+        Response response = _restProcessorUtil.sendBasicRequest(
                 getAvailableGenreSeedUri,
                 null,
                 null,
-                RestUtil.EMethod.GET
+                RestProcessorUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response;
     }
 
     //endregion
 
     //region Verifications
 
-    public synchronized AvailableGenreSeedProcessor verifySeveralAvailableGenreSeedsListedInRespondedList(
+    public AvailableGenreSeedProcessor verifySeveralAvailableGenreSeedsListedInRespondedList(
             @NotNull Response response, @NotNull Map<Integer, String> expectedGenres
     ) {
 
@@ -130,10 +111,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
         verificationWentPassed();
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyTheExpectedListMatchedAccuratelyTheRespondedList(
+    public AvailableGenreSeedProcessor verifyTheExpectedListMatchedAccuratelyTheRespondedList(
             @NotNull Response response, @NotNull Map<Integer, String> expectedGenres
     ) {
 
@@ -201,10 +182,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentPassed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyGenreWasPresentedInTheListOfAvailableGenreSeeds(
+    public AvailableGenreSeedProcessor verifyGenreWasPresentedInTheListOfAvailableGenreSeeds(
             @NotNull Response response, String expectedGenreType) {
 
         AvailableGenreSeedModel availableGenreSeedModel = response.getBody().as(AvailableGenreSeedModel.class);
@@ -223,12 +204,12 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
     //region Tokens verification
 
-    public synchronized AvailableGenreSeedProcessor verifyInvalidTokenErrorMessageResponded(@NotNull Response response) {
+    public AvailableGenreSeedProcessor verifyInvalidTokenErrorMessageResponded(@NotNull Response response) {
 
         ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
 
@@ -259,10 +240,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyExpiredTokenErrorMessageResponded(
+    public AvailableGenreSeedProcessor verifyExpiredTokenErrorMessageResponded(
             @NotNull Response response, String expiredTokenUniqueId) {
 
         ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
@@ -300,10 +281,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyNoneOfTokenProvidedErrorMessageResponded(
+    public AvailableGenreSeedProcessor verifyNoneOfTokenProvidedErrorMessageResponded(
             @NotNull Response response) {
 
         ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
@@ -336,10 +317,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyUnsupportedAuthenticationServiceErrorMessageResponded(
+    public AvailableGenreSeedProcessor verifyUnsupportedAuthenticationServiceErrorMessageResponded(
             @NotNull Pair<String, String> unmodifiableToken, @NotNull Response response
     ) {
 
@@ -378,7 +359,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
     //endregion Tokens verification
