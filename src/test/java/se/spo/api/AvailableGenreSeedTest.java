@@ -93,12 +93,15 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
     @Test(
             priority = 3,
             testName = "SAAVAILABLEGENRESEED_05",
+//            parallel = "methods",  // This should work with TestNG 7.9.0
             description = "Verify that the expired tokens shall not be authenticated",
             dataProviderClass = TestDataFactory.class,
             dataProvider = "ExpiredTokensProvider"
     )
     protected void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated(
             @NotNull Pair<String, String> expiredTokens) {
+
+
 
         //Making a request headed toward getting available genre seeds API with an expired token
         Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());

@@ -89,6 +89,18 @@ public class CsvFileReader {
         }
 
         return values;
+    }
 
+    public int getNumberOfRows(String destinationPath) throws IOException{
+
+        int rowCount = 0;
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(destinationPath))) {
+            while(reader.readLine() != null) {
+                rowCount++;
+            }
+        }
+
+        return rowCount;
     }
 }
