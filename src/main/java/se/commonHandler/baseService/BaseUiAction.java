@@ -4,6 +4,7 @@ import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import org.jetbrains.annotations.NotNull;
+import se.commonHandler.baseService.waitHelper.BaseWaitHelper;
 import se.commonHandler.constantHouse.uiConstant.ActionConstant;
 import se.commonHandler.constantHouse.uiConstant.WaitConstant;
 
@@ -45,7 +46,8 @@ public class BaseUiAction {
     }
 
     public void sendKeyToElement(Locator expLocator, String expText) {
-        waitHelper.waitForElementVisible(expLocator, false);
+
+        waitHelper.waitForElementToBeVisible(expLocator, false);
 
         clearAllValues(expLocator);
 
@@ -54,43 +56,50 @@ public class BaseUiAction {
                 .setNoWaitAfter(actionConst.getNoWaitAfter(actionConst.fillOpts)));
     }
 
-    public void clickOnElement(Locator expLocator) {
-        waitHelper.waitForElementVisible(expLocator);
+    public void clickOnVisibleElement(Locator expLocator) {
+
+        waitHelper.waitForElementToBeVisible(expLocator);
 
         expLocator.click(actionConst.clickOpts
                 .setForce(actionConst.getClearByForced(actionConst.clickOpts))
                 .setNoWaitAfter(actionConst.getNoWaitAfter(actionConst.clickOpts)));
     }
 
-    public void clickOnElement(@NotNull ElementHandle expLocator) {
+    public void clickOnEnabledElement(Locator expLocator) {
+
+        waitHelper.waitForElementToBeVisible(expLocator);
+
+        expLocator.click(actionConst.clickOpts
+                .setForce(actionConst.getClearByForced(actionConst.clickOpts))
+                .setNoWaitAfter(actionConst.getNoWaitAfter(actionConst.clickOpts)));
+    }
+
+    public void clickOnVisibleElementHandle(@NotNull ElementHandle expLocator) {
         expLocator.click();
     }
 
     public void clickOnElementByForcing(Locator expLocator) {
-        waitHelper.waitForElementVisible(expLocator);
-
-        expLocator.click(actionConst.clickOpts
-                .setForce(true));
+        waitHelper.waitForElementToBeVisible(expLocator);
+        expLocator.click(actionConst.clickOpts.setForce(true));
     }
 
     public void clickOnElementByForcing(Locator expLocator, Double delayTimeOut) {
-        waitHelper.waitForElementVisible(expLocator);
-
-        expLocator.click(actionConst.clickOpts
-                .setForce(true)
-                .setDelay(delayTimeOut));
+        waitHelper.waitForElementToBeVisible(expLocator);
+        expLocator.click(actionConst.clickOpts.setForce(true).setDelay(delayTimeOut));
     }
 
-    public void clickOnElement(Locator expLocator, boolean isLongWaitUsed) {
-        waitHelper.waitForElementVisible(expLocator, isLongWaitUsed);
+    public void clickOnVisibleElement(Locator expLocator, boolean isLongWaitUsed) {
+
+        waitHelper.waitForElementToBeVisible(expLocator, isLongWaitUsed);
 
         expLocator.click(actionConst.clickOpts
                 .setForce(actionConst.getClearByForced(actionConst.clickOpts))
                 .setNoWaitAfter(actionConst.getNoWaitAfter(actionConst.clickOpts)));
     }
 
-    public void clickOnElement(Locator expLocator, Double delayTimeOut) {           //Giving a hard-coded delay
-        waitHelper.waitForElementVisible(expLocator, false);
+    public void clickOnVisibleElement(Locator expLocator, Double delayTimeOut) {           //Giving a hard-coded delay
+
+        waitHelper.waitForElementToBeVisible(expLocator, false);
 
         expLocator.click(actionConst.clickOpts
                 .setForce(actionConst.getClearByForced(actionConst.clickOpts))
@@ -98,11 +107,11 @@ public class BaseUiAction {
                 .setDelay(delayTimeOut));
     }
 
-    public void clickOnElement(Locator expLocator,
-                               Double delayTimeOut,
-                               boolean isLongWaitUsed) {                           //Giving a hard-coded delay
+    public void clickOnVisibleElement(Locator expLocator,
+                                      Double delayTimeOut,
+                                      boolean isLongWaitUsed) {                           //Giving a hard-coded delay
 
-        waitHelper.waitForElementVisible(expLocator, isLongWaitUsed);
+        waitHelper.waitForElementToBeVisible(expLocator, isLongWaitUsed);
 
         expLocator.click(actionConst.clickOpts
                 .setForce(actionConst.getClearByForced(actionConst.clickOpts))
@@ -111,24 +120,21 @@ public class BaseUiAction {
     }
 
     public void clickOnRadioButton(Locator expLocator) {
-        waitHelper.waitForElementVisible(expLocator);
-
+        waitHelper.waitForElementToBeVisible(expLocator);
         expLocator.check();
     }
 
     public void selectDropdown(Locator expLocator, String expOption) {
-        waitHelper.waitForElementVisible(expLocator);
-
+        waitHelper.waitForElementToBeVisible(expLocator);
         expLocator.selectOption(expOption);
     }
 
     public void hoverElement(Locator expLocator) {
-        waitHelper.waitForElementVisible(expLocator, false);
         expLocator.hover();
     }
 
-    public void clickOnElement(@NotNull Locator expLocator, int expCounter) {
-        waitHelper.waitForElementVisible(expLocator, false);
+    public void clickOnVisibleElement(@NotNull Locator expLocator, int expCounter) {
+        waitHelper.waitForElementToBeVisible(expLocator, false);
 
         expLocator.click(actionConst.clickOpts
                 .setForce(actionConst.getClearByForced(actionConst.clickOpts))
@@ -137,7 +143,7 @@ public class BaseUiAction {
     }
 
     public void clickOnElementWithSelected(Locator expLocator, boolean isChecked) {
-        waitHelper.waitForElementVisible(expLocator, false);
+        waitHelper.waitForElementToBeVisible(expLocator, false);
 
         if (expLocator.isChecked() != isChecked) {
             expLocator.click(actionConst.clickOpts

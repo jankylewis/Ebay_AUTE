@@ -24,5 +24,4 @@ public class WaitConstant {
     public final int TIMEOUT5S = 5000;
 
     //endregion
-
 }

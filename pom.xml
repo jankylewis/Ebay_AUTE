@@ -18,6 +18,13 @@
 
         <!-- region Dependencies listing -->
 
+        <!--Used for Polling Wait Helper-->
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
         <!--region API Automation with Rest Assured -->
 
         <dependency>

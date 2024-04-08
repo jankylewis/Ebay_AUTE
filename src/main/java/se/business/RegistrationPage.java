@@ -36,7 +36,7 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
 
             Locator invalidEmailAddressLbl = findLocator(LBL_USERNAME_ERRMSG);
 
-            waitHelper.waitForElementVisible(invalidEmailAddressLbl);
+            waitHelper.waitForElementToBeVisible(invalidEmailAddressLbl);
 
             if (baseVerification.verifyStringEquality(msgConst.LBL_INVALID_USERNAME, invalidEmailAddressLbl.textContent())) {
                 verificationWentPassed();
@@ -64,7 +64,7 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
 
             Locator invalidPwdLbl = findLocator(LBL_PASSWORD_ERRMSG);
 
-            waitHelper.waitForElementVisible(invalidPwdLbl);
+            waitHelper.waitForElementToBeVisible(invalidPwdLbl);
 
             if (baseVerification.verifyStringEquality(msgConst.LBL_INVALID_PASSWORD, invalidPwdLbl.textContent())) {
                 verificationWentPassed();
@@ -167,7 +167,7 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
         public void verifyErrorMessagePresentedAtYearField() {
             Locator invalidBirthYearErrMsg = findLocator(LBL_BIRTHDATE_YEAR_TOO_YOUNG_ERRMSG);
 
-            waitHelper.waitForElementVisible(invalidBirthYearErrMsg);
+            waitHelper.waitForElementToBeVisible(invalidBirthYearErrMsg);
 
             if (baseVerification.verifyExpectedStringContained(msgConst.LBL_INVALID_BIRTHYEAR, invalidBirthYearErrMsg.textContent())) {
                 verificationWentPassed();
@@ -177,7 +177,7 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
         public void verifyErrorMessagePresentedAtBirthDateField() {
             Locator invalidBirthDateErrMsg = findLocator(LBL_BIRTHDATE_DAY_ERRMSG);
 
-            waitHelper.waitForElementVisible(invalidBirthDateErrMsg);
+            waitHelper.waitForElementToBeVisible(invalidBirthDateErrMsg);
             if (baseVerification.verifyStringEquality(msgConst.LBL_INVALID_BIRTHDATE, invalidBirthDateErrMsg.textContent())) {
                 verificationWentPassed();
             }
@@ -189,7 +189,7 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
             Locator dobRequiredMsgLbl = findLocator(LBL_BIRTHDATE_ERRMSG);
             Locator genderRequiredMsgLbl = findLocator(LBL_GENDER_ERRMSG);
 
-            waitHelper.waitForElementVisible(displayedNameRequiredMsgLbl);
+            waitHelper.waitForElementToBeVisible(displayedNameRequiredMsgLbl);
 
             if (baseVerification.verifyStringEquality(msgConst.LBL_REQUIRED_DISPLAYED_NAME, displayedNameRequiredMsgLbl.textContent()) &&
                     baseVerification.verifyStringEquality(msgConst.LBL_REQUIRED_DOB, dobRequiredMsgLbl.textContent()) &&
@@ -210,17 +210,17 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
         }
 
         public RegistrationAtLatters tickMarketingCheckbox() {
-            baseUi.clickOnElement(findFirstLocatorVisible(CHK_MARKETING));
+            baseUi.clickOnVisibleElementHandle(findFirstLocatorVisible(CHK_MARKETING));
             return this;
         }
 
         public RegistrationAtLatters tickPrivacyCheckbox() {
-            baseUi.clickOnElement(findFirstLocatorVisible(CHK_PRIVACY));
+            baseUi.clickOnVisibleElementHandle(findFirstLocatorVisible(CHK_PRIVACY));
             return this;
         }
 
         public RegistrationAtLatters clickOnSignUpBtn() {
-            baseUi.clickOnElement(findLocator(BTN_SIGN_UP));
+            baseUi.clickOnVisibleElement(findLocator(BTN_SIGN_UP));
             return this;
         }
 
@@ -240,7 +240,7 @@ public class RegistrationPage extends RegistrationObject implements IVerificatio
     //endregion
 
     public RegistrationPage clickOnNextBtn() {
-        baseUi.clickOnElement(findLocator(BTN_NEXT), Double.valueOf(waitConst.MINTIMEOUT));
+        baseUi.clickOnVisibleElement(findLocator(BTN_NEXT), Double.valueOf(waitConst.MINTIMEOUT));
         return this;
     }
 

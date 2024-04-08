@@ -12,9 +12,15 @@ public class BaseVerification {
         this.page = page;
     }
 
-    public boolean verifyElementVisible(@NotNull Locator expLocator) {
+    //region Locator type verifications
+
+    public boolean verifyIfElementVisible(@NotNull Locator expLocator) {
         return expLocator.isVisible();
     }
+
+    //endregion Locator type verifications
+
+    //region String verifications
 
     public boolean verifyStringEquality(@NotNull String expStr, @NotNull String actStr) {
 
@@ -34,6 +40,19 @@ public class BaseVerification {
                     "Actual string [" + actStr + "] did not contain expected string [" + expStr + "]");
         }
     }
+
+    //endregion String verifications
+
+    //region Locators with String type verifications
+    public boolean verifyIfElementEnabled(@NotNull String expLocatorString) {
+        return page.isEnabled(expLocatorString);
+    }
+
+    public Boolean verifyIfElementVisible(@NotNull String expLocatorString) {
+        return page.isVisible(expLocatorString);
+    }
+
+    //endregion Locators with String type verifications
 
     //region Verification services
 

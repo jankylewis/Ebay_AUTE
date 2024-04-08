@@ -17,28 +17,8 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
     //region Introducing constructors
 
-    private AvailableGenreSeedProcessor() {
+    public AvailableGenreSeedProcessor() {
         super();
-    }
-
-    private AvailableGenreSeedProcessor(RestUtil restUtil) {
-        super(restUtil);
-    }
-
-    //endregion
-
-    //region Processing an instance
-
-    public static final AvailableGenreSeedProcessor INSTANCE = getInstance();
-
-    private static final class AvailableGenreSeedProcessorHelper {
-        private static final AvailableGenreSeedProcessor _INSTANCE =
-                new AvailableGenreSeedProcessor();
-    }
-
-    private static AvailableGenreSeedProcessor getInstance() {
-        _requestProcessor = RestUtil.getInstance();
-        return AvailableGenreSeedProcessorHelper._INSTANCE;
     }
 
     //endregion
@@ -47,22 +27,22 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
     //region Services regarding API requests
 
-    public synchronized Pair<AvailableGenreSeedProcessor, Response> getAvailableGenreSeed() {
+    public Response getAvailableGenreSeed() {
 
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 getAvailableGenreSeedUri,
                 null,
                 null,
                 RestUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response;
     }
 
-    public synchronized Pair<AvailableGenreSeedProcessor, Response> getAvailableGenreSeed(String dummyToken) {
+    public Response getAvailableGenreSeed(String dummyToken) {
 
         //Making request with an expected token
-        HashMap<RestUtil, Response> response = _requestProcessor.sendAuthenticatedRequestWithResponse(
+        Map<?, Response> response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
                 dummyToken,
                 getAvailableGenreSeedUri,
                 null,
@@ -70,26 +50,27 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
                 RestUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response.get(dummyToken);
     }
 
-    public synchronized Pair<AvailableGenreSeedProcessor, Response> getAvailableGenreSeedWithBasicRequest() {
+    public Response getAvailableGenreSeedWithBasicRequest() {
+
         //Making request with an expected token
-        HashMap<RestUtil, Response> response = _requestProcessor.sendBasicRequestWithResponse(
+        Response response = _restProcessorUtil.sendBasicRequest(
                 getAvailableGenreSeedUri,
                 null,
                 null,
                 RestUtil.EMethod.GET
         );
 
-        return Pair.with(INSTANCE, response.get(_requestProcessor));
+        return response;
     }
 
     //endregion
 
     //region Verifications
 
-    public synchronized AvailableGenreSeedProcessor verifySeveralAvailableGenreSeedsListedInRespondedList(
+    public AvailableGenreSeedProcessor verifySeveralAvailableGenreSeedsListedInRespondedList(
             @NotNull Response response, @NotNull Map<Integer, String> expectedGenres
     ) {
 
@@ -130,10 +111,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
         verificationWentPassed();
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyTheExpectedListMatchedAccuratelyTheRespondedList(
+    public AvailableGenreSeedProcessor verifyTheExpectedListMatchedAccuratelyTheRespondedList(
             @NotNull Response response, @NotNull Map<Integer, String> expectedGenres
     ) {
 
@@ -201,10 +182,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentPassed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyGenreWasPresentedInTheListOfAvailableGenreSeeds(
+    public AvailableGenreSeedProcessor verifyGenreWasPresentedInTheListOfAvailableGenreSeeds(
             @NotNull Response response, String expectedGenreType) {
 
         AvailableGenreSeedModel availableGenreSeedModel = response.getBody().as(AvailableGenreSeedModel.class);
@@ -223,12 +204,12 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
     //region Tokens verification
 
-    public synchronized AvailableGenreSeedProcessor verifyInvalidTokenErrorMessageResponded(@NotNull Response response) {
+    public AvailableGenreSeedProcessor verifyInvalidTokenErrorMessageResponded(@NotNull Response response) {
 
         ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
 
@@ -237,12 +218,12 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         int respondedStatusCode = errorModel.getStatus();
         String respondedErrorMessage = errorModel.getMessage();
 
-        if (respondedStatusCode == apiConstant.RED_STATUS &&
+        if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
                 Objects.equals(respondedErrorMessage, apiMessageConstant.INVALID_TOKEN_ERROR_MESSAGE)) {
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was successfully matched the expectations: ",
                     "\nStatus code: ",
-                    String.valueOf(apiConstant.RED_STATUS),
+                    String.valueOf(apiConstant.UNAUTHORIZED),
                     "\nError message: ",
                     apiMessageConstant.INVALID_TOKEN_ERROR_MESSAGE
             )));
@@ -252,17 +233,17 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         else {
             LOGGER.error(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was not matched the expectations :(",
-                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.RED_STATUS), "]",
+                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
                     "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.INVALID_TOKEN_ERROR_MESSAGE, "]"
             )));
 
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyExpiredTokenErrorMessageResponded(
+    public AvailableGenreSeedProcessor verifyExpiredTokenErrorMessageResponded(
             @NotNull Response response, String expiredTokenUniqueId) {
 
         ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
@@ -272,7 +253,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         int respondedStatusCode = errorModel.getStatus();
         String respondedErrorMessage = errorModel.getMessage();
 
-        if (respondedStatusCode == apiConstant.RED_STATUS &&
+        if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
                 Objects.equals(respondedErrorMessage, apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE)) {
 
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
@@ -282,7 +263,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was successfully matched the expectations: ",
                     "\nStatus code: ",
-                    String.valueOf(apiConstant.RED_STATUS),
+                    String.valueOf(apiConstant.UNAUTHORIZED),
                     "\nError message: ",
                     apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE
             )));
@@ -292,7 +273,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         else {
             LOGGER.error(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was not matched the expectations :(",
-                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.RED_STATUS), "]",
+                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
                     "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE, "]"
             )));
             LOGGER.error("Token's unique id that was expected to be an expired token = " + expiredTokenUniqueId);
@@ -300,10 +281,10 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyNoneOfTokenProvidedErrorMessageResponded(
+    public AvailableGenreSeedProcessor verifyNoneOfTokenProvidedErrorMessageResponded(
             @NotNull Response response) {
 
         ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
@@ -313,13 +294,13 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         int respondedStatusCode = errorModel.getStatus();
         String respondedErrorMessage = errorModel.getMessage();
 
-        if (respondedStatusCode == apiConstant.RED_STATUS &&
+        if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
                 Objects.equals(respondedErrorMessage, apiMessageConstant.NO_TOKEN_PROVIDED)) {
 
             LOGGER.info(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was successfully matched the expectations: ",
                     "\nStatus code: ",
-                    String.valueOf(apiConstant.RED_STATUS),
+                    String.valueOf(apiConstant.UNAUTHORIZED),
                     "\nError message: ",
                     apiMessageConstant.NO_TOKEN_PROVIDED
             )));
@@ -329,17 +310,17 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
         else {
             LOGGER.error(StringUtil.appendStrings(Arrays.asList(
                     "\nThe response was not matched the expectations :(",
-                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.RED_STATUS), "]",
+                    "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
                     "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.NO_TOKEN_PROVIDED, "]"
             )));
 
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
-    public synchronized AvailableGenreSeedProcessor verifyUnsupportedAuthenticationServiceErrorMessageResponded(
+    public AvailableGenreSeedProcessor verifyUnsupportedAuthenticationServiceErrorMessageResponded(
             @NotNull Pair<String, String> unmodifiableToken, @NotNull Response response
     ) {
 
@@ -378,7 +359,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
             verificationWentFailed();
         }
 
-        return INSTANCE;
+        return this;
     }
 
     //endregion Tokens verification

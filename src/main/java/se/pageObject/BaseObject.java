@@ -21,8 +21,11 @@ public class BaseObject {
     }
 
     protected final String BTN_LOGO = "xpath=//a[img[@id = 'gh-logo']]";
-    protected final String BTN_ACCOUNT_MENU = "xpath=//header//a[@data-encore-id='buttonPrimary']//following-sibling::button[@data-encore-id]";
-    protected final String BTN_LOG_OUT = "xpath=//button[contains(@data-testid, 'logout')]z";
+    protected final String BTN_ACCOUNT_MENU = "css=button[aria-controls='profileMenu']";
+    protected final String BTN_LOG_OUT = "xpath=//button[contains(@data-testid, 'logout')]";
+    protected final String DIV_PLAYLISTS = "css=div[data-encore-id='listRow']";     //This could be a list of locators
+    protected final String SECTION_SKELETON_LOADING =
+            "xpath=//section[@data-testid='home-page'][//*[contains(@data-testid, 'skeleton')]]";
 
     //region Locating locators service
 
@@ -52,6 +55,7 @@ public class BaseObject {
     }
 
     protected List<Locator> findListOfLocators(String expLocator) {
+
         listOfFoundLocators = new ArrayList<>();
         int timesOfRetrying = 3;
 
@@ -146,6 +150,14 @@ public class BaseObject {
         while (timesOfRetrying > 0);
 
         return listOfFoundELocators;
+    }
+
+    //endregion
+
+    //region
+
+    protected int getNumberOfLocatorsFound(String expLocator) {
+        return page.locator(expLocator).all().size();
     }
 
     //endregion

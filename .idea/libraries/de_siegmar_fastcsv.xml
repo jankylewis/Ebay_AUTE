@@ -2,7 +2,7 @@
   <library name="de.siegmar.fastcsv" type="repository">
     <properties maven-id="de.siegmar:fastcsv:LATEST" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/de/siegmar/fastcsv/3.0.0/fastcsv-3.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/de/siegmar/fastcsv/3.1.0/fastcsv-3.1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

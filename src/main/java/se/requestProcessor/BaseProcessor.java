@@ -16,14 +16,14 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
     protected ApiConstant apiConstant;
     protected ApiMessageConstant apiMessageConstant;
-
-    protected static RestUtil _requestProcessor;
+    protected RestUtil _restProcessorUtil;
 
     //region Generating an instance
 
     protected BaseProcessor() {}
-    protected BaseProcessor(RestUtil requestProcessor) {
-        _requestProcessor = requestProcessor;
+
+    protected BaseProcessor(RestUtil restProcessorUtil){
+        _restProcessorUtil = restProcessorUtil;
     }
 
     //endregion
@@ -33,9 +33,13 @@ public class BaseProcessor extends BaseApiService implements IVerification {
     {
         apiConstant = new ApiConstant();
         apiMessageConstant = new ApiMessageConstant();
+
+        _restProcessorUtil = new RestUtil();
     }
 
     //endregion
+
+    //region Verifying response code statuses
 
     protected Pair<Boolean, Integer> verifyResponseStatusCodeWentGreen(@NotNull Response response) {
 
@@ -44,6 +48,32 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
         return Pair.with(responseHealth, responseStatusCode);
     }
+
+    protected Pair<Boolean, Integer> verifyApiThrownErrorWithInvalidAccessToken(@NotNull Response response) {
+
+        responseStatusCode = response.statusCode();
+        responseHealth = responseStatusCode == apiConstant.UNAUTHORIZED;
+
+        return Pair.with(responseHealth, responseStatusCode);
+    }
+
+    protected Pair<Boolean, Integer> verifyResponseStatusCodeWent404(@NotNull Response response) {
+
+        responseStatusCode = response.statusCode();
+        responseHealth = responseStatusCode == apiConstant.SERVICE_NOT_FOUND;
+
+        return Pair.with(responseHealth, responseStatusCode);
+    }
+
+    protected Pair<Boolean, Integer> verifyResponseStatusCodeWent401(@NotNull Response response) {
+
+        responseStatusCode = response.statusCode();
+        responseHealth = responseStatusCode == apiConstant.UNSUPPORTED_AUTHENTICATION_SERVICE;
+
+        return Pair.with(responseHealth, responseStatusCode);
+    }
+
+    //endregion
 
     //region IVerification
 

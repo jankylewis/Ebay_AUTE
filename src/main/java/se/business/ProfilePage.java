@@ -11,22 +11,22 @@ public class ProfilePage extends ProfileObject implements IVerification {
     }
 
     public void verifySpotifyLogoPresented() {
-        waitHelper.waitForElementVisible(findLocator(BTN_SPOTIFY_LOGO), true);
-        baseVerification.verifyElementVisible(findLocator(BTN_SPOTIFY_LOGO));
+        waitHelper.waitForElementToBeVisible(findLocator(BTN_SPOTIFY_LOGO), true);
+        baseVerification.verifyIfElementVisible(findLocator(BTN_SPOTIFY_LOGO));
 
         verificationWentPassed();
     }
 
     public void verifyUserSuccessfullyLoggedIn() {
-        waitHelper.waitForElementVisible(findLocator(BTN_PROFILE), true);
-        baseVerification.verifyElementVisible(findLocator(BTN_PROFILE));
+        waitHelper.waitForElementToBeVisible(findLocator(BTN_PROFILE), true);
+        baseVerification.verifyIfElementVisible(findLocator(BTN_PROFILE));
 
         verificationWentPassed();
     }
 
     public ProfilePage logOutOfSpotifyGateway() {
-        baseUi.clickOnElement(findLocator(BTN_PROFILE));
-        baseUi.clickOnElement(findLocator(BTN_LOG_OUT));
+        baseUi.clickOnVisibleElement(findLocator(BTN_PROFILE));
+        baseUi.clickOnVisibleElement(findLocator(BTN_LOG_OUT));
         return this;
     }
 

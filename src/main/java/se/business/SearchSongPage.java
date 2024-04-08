@@ -37,7 +37,7 @@ public class SearchSongPage extends SearchSongObject
     }
 
     public SearchSongPage switchToTab(@NotNull ETab tab) {
-        baseUi.clickOnElement(
+        baseUi.clickOnVisibleElement(
                 findLocator(LNK_TAB(getTabIndex(tab.getEValue()))));
         return this;
     }
@@ -373,9 +373,9 @@ public class SearchSongPage extends SearchSongObject
         Locator noResultsFoundLbl = findLocator(LBL_NO_RESULTS_FOUND);
         Locator useDifferentKeywords = findLocator(LBL_USE_DIFFERENT_KEYWORDS);
 
-        if (baseVerification.verifyElementVisible(noResultsFoundLbl) &&
+        if (baseVerification.verifyIfElementVisible(noResultsFoundLbl) &&
                 baseVerification.verifyStringEquality(msgConst.LBL_NO_RESULTS_FOUND(searchKey), noResultsFoundLbl.textContent()) &&
-                baseVerification.verifyElementVisible(useDifferentKeywords) &&
+                baseVerification.verifyIfElementVisible(useDifferentKeywords) &&
                 baseVerification.verifyStringEquality(msgConst.LBL_USE_DIFFERENT_KEYWORDS, useDifferentKeywords.textContent())) {
 
             verificationWentPassed();
