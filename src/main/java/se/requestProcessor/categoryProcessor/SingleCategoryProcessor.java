@@ -17,7 +17,7 @@ public class SingleCategoryProcessor extends BaseProcessor {
 
     public Response getSingleCategoriesSuccessfully(String expCategory) {
 
-        Response apiResponse = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Response apiResponse = _restUtil.sendAuthenticatedRequestWithResponse(
                 baseSingleCategoryBrowsingUri + expCategory,
                 null,
                 null,
@@ -29,7 +29,7 @@ public class SingleCategoryProcessor extends BaseProcessor {
 
     public Response getSingleCategoriesWithInvalidAccessToken(String expCategory, String expToken) {
 
-        Map<?, Response> responseMap = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Map<?, Response> responseMap = _restUtil.sendAuthenticatedRequestWithResponse(
                 expToken,
                 baseSingleCategoryBrowsingUri + expCategory,
                 null,

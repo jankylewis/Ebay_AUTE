@@ -29,7 +29,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
 
     public Response getAvailableGenreSeed() {
 
-        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Response response = _restUtil.sendAuthenticatedRequestWithResponse(
                 getAvailableGenreSeedUri,
                 null,
                 null,
@@ -42,7 +42,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
     public Response getAvailableGenreSeed(String dummyToken) {
 
         //Making request with an expected token
-        Map<?, Response> response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Map<?, Response> response = _restUtil.sendAuthenticatedRequestWithResponse(
                 dummyToken,
                 getAvailableGenreSeedUri,
                 null,
@@ -56,7 +56,7 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
     public Response getAvailableGenreSeedWithBasicRequest() {
 
         //Making request with an expected token
-        Response response = _restProcessorUtil.sendBasicRequest(
+        Response response = _restUtil.sendBasicRequest(
                 getAvailableGenreSeedUri,
                 null,
                 null,
