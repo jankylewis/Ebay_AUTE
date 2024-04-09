@@ -21,7 +21,7 @@ public class GeneralCategoryProcessor extends BaseProcessor {
     //Blocking access to this method from others
     public Response getBrowseCategoriesSuccessfully() {
 
-        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Response response = _restUtil.sendAuthenticatedRequestWithResponse(
                 categoriesBrowsingUri,
                 null,
                 null,
@@ -35,7 +35,7 @@ public class GeneralCategoryProcessor extends BaseProcessor {
 
         String x = StringUtil.appendStrings(Arrays.asList(categoriesBrowsingUri, "/", apiFaker.produceFakeUuid().toString()));
 
-        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Response response = _restUtil.sendAuthenticatedRequestWithResponse(
                 StringUtil.appendStrings(Arrays.asList(categoriesBrowsingUri, "/", apiFaker.produceFakeUuid().toString())),
                 null,
                 null,

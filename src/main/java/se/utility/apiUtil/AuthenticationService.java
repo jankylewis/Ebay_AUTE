@@ -12,11 +12,11 @@ public class AuthenticationService {
     protected AuthenticationService(){}
 
     private static final String AUTHENTICATION_URI = "https://accounts.spotify.com/api/token";
-    private RestUtil _restProcessorUtil;
+    private RestUtil _restUtil;
 
     protected String getAccessToken() {
 
-        _restProcessorUtil = new RestUtil();
+        _restUtil = new RestUtil();
 
         AuthenticationModel authenticationModel = new AuthenticationModel();
 
@@ -26,13 +26,13 @@ public class AuthenticationService {
                 Pair.with("client_secret", authenticationModel.getClientSecret())
         );
 
-        _restProcessorUtil.sendBasicRequest(
+        _restUtil.sendBasicRequest(
                 AUTHENTICATION_URI,
                 requestForm,
                 ContentType.URLENC,
                 RestUtil.EMethod.POST
         );
 
-        return _restProcessorUtil.getPropertyValue("access_token");
+        return _restUtil.getPropertyValue("access_token");
     }
 }

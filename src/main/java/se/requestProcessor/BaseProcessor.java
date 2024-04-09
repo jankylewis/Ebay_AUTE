@@ -16,14 +16,14 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
     protected ApiConstant apiConstant;
     protected ApiMessageConstant apiMessageConstant;
-    protected RestUtil _restProcessorUtil;
+    protected RestUtil _restUtil;
 
     //region Generating an instance
 
     protected BaseProcessor() {}
 
     protected BaseProcessor(RestUtil restProcessorUtil){
-        _restProcessorUtil = restProcessorUtil;
+        _restUtil = restProcessorUtil;
     }
 
     //endregion
@@ -34,7 +34,7 @@ public class BaseProcessor extends BaseApiService implements IVerification {
         apiConstant = new ApiConstant();
         apiMessageConstant = new ApiMessageConstant();
 
-        _restProcessorUtil = new RestUtil();
+        _restUtil = new RestUtil();
     }
 
     //endregion

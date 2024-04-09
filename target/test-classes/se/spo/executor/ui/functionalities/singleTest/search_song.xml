@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Search Songs Tests"
+       parallel="tests"
+       thread-count="9">
+
+    <!--region Successful searches -->
+
+    <test name="SWSEARCH_01">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtAllTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_02">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtArtistsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_03">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtSongsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_04">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtPlaylistsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_05">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtAlbumsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_06">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtPodcastsAndShowsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_07">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtGenresAndMoodsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="SWSEARCH_08">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsSuccessfullyAtProfilesTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!--endregion-->
+
+    <test name="SWSEARCH_09">
+        <classes>
+            <class name="se.spo.gui.SearchSongTest">
+                <methods>
+                    <include name="spotifyUiTest_verifyUserSearchedSongsUnsuccessfullyAtPodcastsAndShowsTab"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

@@ -25,7 +25,7 @@ public class MarketProcessor extends BaseProcessor {
 
     public Response getMarketsWithNormalUri() {       //Normal request
 
-        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Response response = _restUtil.sendAuthenticatedRequestWithResponse(
             marketBrowsingUri,
                 null,
                 null,
@@ -37,7 +37,7 @@ public class MarketProcessor extends BaseProcessor {
 
     public Response getMarketsWithNormalUri(String abnormalSuffix) {       //Abnormal request
 
-        Response response = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Response response = _restUtil.sendAuthenticatedRequestWithResponse(
                 marketBrowsingUri + "/" + abnormalSuffix,
                 null,
                 null,
@@ -49,7 +49,7 @@ public class MarketProcessor extends BaseProcessor {
 
     public Response getMarketsWithExpiredToken(String expiredToken) {
 
-        Map<?, Response> responseMap = _restProcessorUtil.sendAuthenticatedRequestWithResponse(
+        Map<?, Response> responseMap = _restUtil.sendAuthenticatedRequestWithResponse(
                 expiredToken,
                 marketBrowsingUri,
                 null,
