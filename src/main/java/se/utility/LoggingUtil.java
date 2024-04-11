@@ -9,5 +9,4 @@ public final class LoggingUtil {
 
     public static final Supplier<Logger> LOGGER = () -> LogManager.getLogger(LoggingUtil.class);
     public static final ThreadLocal<Logger> TL_LOGGER = ThreadLocal.withInitial(LOGGER);
-
 }

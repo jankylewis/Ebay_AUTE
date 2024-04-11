@@ -101,11 +101,9 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
     protected void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated(
             @NotNull Pair<String, String> expiredTokens) {
 
-
-
         //Making a request headed toward getting available genre seeds API with an expired token
         Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());
-
+        
         availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded(dataResponded, expiredTokens.getValue0());
     }
 
