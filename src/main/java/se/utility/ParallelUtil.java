@@ -1,6 +1,8 @@
 package se.utility;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +10,39 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ParallelUtil {
+
+    //region Introducing constructors
+
+    public ParallelUtil() {}
+
+    //endregion
+
+    public <T> void parallelTasks(@NotNull Collection<Runnable> tasks, @Nullable Integer numberOfThreadsProcessed) {
+
+        numberOfThreadsProcessed =
+                numberOfThreadsProcessed == null ? Runtime.getRuntime().availableProcessors() : numberOfThreadsProcessed;
+
+        //Defining number of threads processed
+        final ExecutorService THREADS_LAUNCHER = Executors.newFixedThreadPool(numberOfThreadsProcessed);
+
+        try {
+
+            CountDownLatch LATCH_COUNTER = new CountDownLatch(tasks.size());
+
+            for (final Runnable task : tasks) {
+                THREADS_LAUNCHER.execute(task);
+                LATCH_COUNTER.countDown();
+            }
+
+            //Waiting for all task to be completed
+            LATCH_COUNTER.await();
+
+        } catch (InterruptedException iEx) {
+            throw new RuntimeException(iEx);
+        } finally {
+            THREADS_LAUNCHER.shutdown();
+        }
+    }
 
     private static <T> T executeFunction(@NotNull Callable<T> func) throws Exception {
         return func.call();
@@ -76,26 +111,6 @@ public class ParallelUtil {
         }).toList();
 
         listOfFutures.clear();
-    }
-
-    public static <T> void parallelTasks(@NotNull Collection<Runnable> tasks) {
-
-        //Defining number of threads processed
-        final ExecutorService THREAD_LAUNCHER =
-                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-        try {
-            CountDownLatch LATCH_COUNTER = new CountDownLatch(tasks.size());
-            for (final Runnable task : tasks) {
-                THREAD_LAUNCHER.execute(task);
-                LATCH_COUNTER.countDown();
-            }
-            LATCH_COUNTER.await();          //Waiting for all task to be completed
-        } catch (InterruptedException iEx) {
-            throw new RuntimeException(iEx);
-        } finally {
-            THREAD_LAUNCHER.shutdown();
-        }
     }
 
     //region Running tasks in parallel as runnable objects

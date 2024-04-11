@@ -10,6 +10,7 @@ import se.spo.api.testDataProvider.TestDataFactory;
 import se.spo.api.testDataProvider.TestDataFactory.AvailableGenreSeedDataProvider;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class AvailableGenreSeedTest extends BaseApiTestService {
@@ -103,8 +104,46 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
 
         //Making a request headed toward getting available genre seeds API with an expired token
         Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());
-        
+
         availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded(dataResponded, expiredTokens.getValue0());
+    }
+
+    @Test(
+            priority = 3,
+            testName = "SAAVAILABLEGENRESEED_08",
+            description = "Verify that the expired tokens shall not be authenticated"
+    )
+    protected void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated_WithParallelMode() throws IOException {
+
+        TestDataFactory.AvailableGenreSeedDataProvider availableGenreSeedDataProvider = new AvailableGenreSeedDataProvider();
+        List<Pair<String, String>> expiredTokens = availableGenreSeedDataProvider.prepareExpiredTokens();
+
+        List<Runnable> tasks = null;
+
+        for (int idx = 0; idx < expiredTokens.size(); idx++) {
+
+            int _idx = idx;
+            String _expiredTokens = expiredTokens.get(_idx).getValue1();
+
+            tasks.add(() -> {
+
+                //Making a request headed toward getting available genre seeds API with an expired token
+                Response dataResponded =
+                        availableGenreSeedProcessor.getAvailableGenreSeed(_expiredTokens);
+
+                //Verifying that API threw error when being hit with an expired token
+//                availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded_WithParallelTest(dataResponded, _expiredTokens);
+            });
+        }
+
+
+
+        Runnable task = () -> {
+
+            //Making a request headed toward getting available genre seeds API with an expired token
+            Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());
+            availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded(dataResponded, expiredTokens.getValue0());
+        };
     }
 
     @Test(

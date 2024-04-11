@@ -22,10 +22,6 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
     protected BaseProcessor() {}
 
-    protected BaseProcessor(RestUtil restProcessorUtil){
-        _restUtil = restProcessorUtil;
-    }
-
     //endregion
 
     //region Initializing const

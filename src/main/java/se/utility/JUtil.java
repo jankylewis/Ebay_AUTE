@@ -234,12 +234,12 @@ public class JUtil {            //J means Java language
 
     public static class ListUtil {
 
-        public static Object @NotNull [] convertListToArrayObject(@NotNull List<?> convertedList) {
+        public static Object @NotNull [] convertListToArrayObject(@NotNull List<?> convertedObject) {
 
-            Object[] arrayObject = new Object[convertedList.size()];
+            Object[] arrayObject = new Object[convertedObject.size()];
 
-            for (int i = 0; i < convertedList.size(); ++i) {
-                arrayObject[i] = convertedList.get(i);
+            for (int i = 0; i < convertedObject.size(); ++i) {
+                arrayObject[i] = convertedObject.get(i);
             }
 
             return arrayObject;

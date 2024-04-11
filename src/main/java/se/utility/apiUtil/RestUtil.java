@@ -28,7 +28,7 @@ public class RestUtil {
     private Response _response;
     private JsonPath _jsonPath;
 
-    private AuthenticationService _authenticationProcessor;
+    private AuthenticationService _authenticationService;
 
     private String _requestUri;
 
@@ -38,7 +38,7 @@ public class RestUtil {
 
     {
         _requestSpecification = given();
-        _authenticationProcessor = new AuthenticationService();
+        _authenticationService = new AuthenticationService();
     }
 
     //endregion
@@ -105,7 +105,7 @@ public class RestUtil {
 
     private String setAccessToken() {
 
-        String accessToken = _authenticationProcessor.getAccessToken();
+        String accessToken = _authenticationService.getAccessToken();
 
         _requestSpecification
                 .given()
