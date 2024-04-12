@@ -30,7 +30,7 @@ public class BaseProcessor extends BaseApiService implements IVerification {
         apiConstant = new ApiConstant();
         apiMessageConstant = new ApiMessageConstant();
 
-        _restUtil = new RestUtil();
+        _restUtil = _restUtil == null ? new RestUtil() : _restUtil;
     }
 
     //endregion

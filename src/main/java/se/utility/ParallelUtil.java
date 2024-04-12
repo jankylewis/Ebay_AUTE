@@ -59,6 +59,40 @@ public class ParallelUtil {
         return func.call();
     }
 
+    public <T> void _parallelizeFunctions(@NotNull List<Callable<T>> tasks)
+            throws InterruptedException {
+
+        List<Callable<T>> listOfTasks = new ArrayList<>();
+
+        for (Callable<T> func : tasks) {
+            Callable<T> _func = () -> executeFunction(func);
+
+            //Adding all tasks to a list
+            listOfTasks.add(_func);
+        }
+
+        final ExecutorService THREAD_LAUNCHER =
+                Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+        try {
+
+            //Starting threads accordingly to the number of threads that has been defined
+            List<Future<T>> futures = THREAD_LAUNCHER.invokeAll(listOfTasks);
+
+            //Throwing exceptions if any
+            futures.stream().allMatch(res -> {
+                try {
+                    return res.get().equals(true) && res.state() == Future.State.SUCCESS;
+                } catch (ExecutionException | InterruptedException thrownEx) {
+                    throw new RuntimeException(thrownEx);
+                }});
+
+            futures.clear();
+        } finally {
+            THREAD_LAUNCHER.shutdown();
+        }
+    }
+
     public static <T> void parallelizeFunctions(@NotNull List<Callable<T>> tasks)
             throws InterruptedException {
 

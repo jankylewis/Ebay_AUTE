@@ -264,6 +264,8 @@ public class RestUtil {
                 .custom()
                 .setConnectionManager(new PoolingHttpClientConnectionManager())
                 .build());
+
+        RestAssured.config = ((RestAssuredConfig) _httpClientConfig);
     }
 
     //endregion

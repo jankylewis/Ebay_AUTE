@@ -50,6 +50,8 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
                 RestUtil.EMethod.GET
         );
 
+        _restUtil = null;
+
         return response.get(dummyToken);
     }
 

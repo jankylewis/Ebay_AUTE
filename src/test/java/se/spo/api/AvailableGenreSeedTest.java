@@ -136,20 +136,14 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
 
             tasks.add(() -> {
 
-                RestUtil ru = new RestUtil();
-
-//                ru.configureConnectionManager();
-
                 //Making a request headed toward getting available genre seeds API with an expired token
                 Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(_expiredTokens);
-
-                ru.releaseConnection();
 
                 return responses.add(dataResponded);
             });
         }
 
-        ParallelUtil.parallelizeFunctions(tasks);//, expiredTokenPairs.size());
+        new ParallelUtil()._parallelizeFunctions(tasks);
 
         availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded_WithParallelTest(responses, expiredTokenUniqueIDs);
     }
