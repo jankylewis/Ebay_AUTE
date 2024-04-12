@@ -17,43 +17,54 @@ public class ParallelUtil {
 
     //endregion
 
-    public <T> void parallelTasks(@NotNull Collection<Runnable> tasks, @Nullable Integer numberOfThreadsProcessed) {
-
-        numberOfThreadsProcessed =
-                numberOfThreadsProcessed == null ? Runtime.getRuntime().availableProcessors() : numberOfThreadsProcessed;
-
-        //Defining number of threads processed
-        final ExecutorService THREADS_LAUNCHER = Executors.newFixedThreadPool(numberOfThreadsProcessed);
-
-        try {
-
-            CountDownLatch LATCH_COUNTER = new CountDownLatch(tasks.size());
-
-            for (final Runnable task : tasks) {
-                THREADS_LAUNCHER.execute(task);
-                LATCH_COUNTER.countDown();
-            }
-
-            //Waiting for all task to be completed
-            LATCH_COUNTER.await();
-
-        } catch (InterruptedException iEx) {
-            throw new RuntimeException(iEx);
-        } finally {
-            THREADS_LAUNCHER.shutdown();
-        }
-    }
+//    public <T> void parallelTasks(@NotNull List<Callable> tasks, @Nullable Integer numberOfThreadsProcessed) {
+//
+//        int _numberOfThreadsProcessed =
+//                numberOfThreadsProcessed == null ? Runtime.getRuntime().availableProcessors() : numberOfThreadsProcessed;
+//
+//        //Defining number of threads processed
+//        ExecutorService THREADS_LAUNCHER = Executors.newFixedThreadPool(_numberOfThreadsProcessed);
+//
+//        try {
+//
+//            CountDownLatch LATCH_COUNTER = new CountDownLatch(tasks.size());
+//
+//            for (Callable task : tasks) {
+////                THREADS_LAUNCHER.execute(task);
+////                LATCH_COUNTER.countDown();
+//
+//                THREADS_LAUNCHER.submit(() -> {
+//
+//                    try {
+//                        return task.call();
+//                    } finally {
+//                        LATCH_COUNTER.countDown();
+//                    }
+//
+//                });
+//
+//            }
+//
+//            //Waiting for all task to be completed
+//            LATCH_COUNTER.await();
+//
+//        } catch (InterruptedException iEx) {
+//            throw new RuntimeException(iEx);
+//        } finally {
+//            THREADS_LAUNCHER.shutdown();
+//        }
+//    }
 
     private static <T> T executeFunction(@NotNull Callable<T> func) throws Exception {
         return func.call();
     }
 
-    public static <T> void parallelizeFunctions(@NotNull List<Callable<T>> funcs)
+    public static <T> void parallelizeFunctions(@NotNull List<Callable<T>> tasks)
             throws InterruptedException {
 
         List<Callable<T>> listOfTasks = new ArrayList<>();
 
-        for (Callable<T> func : funcs) {
+        for (Callable<T> func : tasks) {
             Callable<T> _func = () -> executeFunction(func);
 
             //Adding all tasks to a list
