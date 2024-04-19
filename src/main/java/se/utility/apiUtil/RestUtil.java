@@ -1,14 +1,15 @@
 package se.utility.apiUtil;
 
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+//import io.restassured.config.HttpClientConfig;
+//import io.restassured.config.RestAssuredConfig;
+
 import io.restassured.RestAssured;
-import io.restassured.config.HttpClientConfig;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,16 +28,18 @@ public class RestUtil {
 
     //endregion
 
+//    private HttpClientConfig _httpClientConfig;
+//    private RestAssuredConfig _restAssuredConfig;
+//    private ThreadLocal<String> _accessTokens = new ThreadLocal<>();
+
     //region Introducing variables
 
     private AuthenticationService _authenticationService;
+
     private RequestSpecification _requestSpecification;
 
     private Response _response;
     private JsonPath _jsonPath;
-
-    private HttpClientConfig _httpClientConfig;
-    private RestAssuredConfig _restAssuredConfig;
 
     private String _requestUri;
 
@@ -145,7 +148,7 @@ public class RestUtil {
             EMethod requestMethod
             ) {
 
-        configureConnectionManager();
+//        configureConnectionManager();
 
         setAccessToken(expectedToken);
 
@@ -168,8 +171,8 @@ public class RestUtil {
             case OPTIONS -> sendOptionsRequest();
         }
 
-        releaseConnection();
-
+//        releaseConnection();
+        
         return new HashMap<>(){{
             put(expectedToken, _response);
         }};
@@ -258,15 +261,15 @@ public class RestUtil {
 
     //region Pre-request > Preparing a Connection Manager
 
-    public void configureConnectionManager() {
-        _httpClientConfig = new HttpClientConfig();
-        _httpClientConfig.httpClientFactory(() -> HttpClients
-                .custom()
-                .setConnectionManager(new PoolingHttpClientConnectionManager())
-                .build());
-
-        RestAssured.config = ((RestAssuredConfig) _httpClientConfig);
-    }
+//    public void configureConnectionManager() {
+//        _httpClientConfig = new HttpClientConfig();
+//        _httpClientConfig.httpClientFactory(() -> HttpClients
+//                .custom()
+//                .setConnectionManager(new PoolingHttpClientConnectionManager())
+//                .build());
+//
+//        RestAssured.config = ((RestAssuredConfig) _httpClientConfig);
+//    }
 
     //endregion
 
