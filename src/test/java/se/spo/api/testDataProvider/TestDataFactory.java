@@ -22,7 +22,8 @@ public class TestDataFactory extends BaseApiService {
     private String methodName;
     private String className;
     private Pair<String, String> testContext;
-    private final String baseApiTestDataFolder = "apiTestDataFiles/";
+
+    private static final String baseApiTestDataFolder = "apiTestDataFiles/";
 
     //endregion
 
@@ -125,7 +126,8 @@ public class TestDataFactory extends BaseApiService {
 
         return INSTANCE;
     }
-    public static class AvailableGenreSeedDataProvider {
+
+    public static class AvailableGenreSeedDataProvider extends TestDataFactory {
 
         @DataProvider(
                 parallel = false,
@@ -295,6 +297,16 @@ public class TestDataFactory extends BaseApiService {
             }
 
             throw new RuntimeException("Data provider got an unexpected error!      ");
+        }
+
+        public List<Pair<String, String>> prepareExpiredTokens() throws IOException {
+
+            List<Pair<String, String>> expiredTokens = CsvFileReader
+                    .INSTANCE
+                    .getValuesWithHeaders(
+                            baseApiTestDataFolder + "expired_tokens.csv", new String[]{"Tokens' unique ids", "Expired tokens provided"});
+
+            return expiredTokens;
         }
     }
 }

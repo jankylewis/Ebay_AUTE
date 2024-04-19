@@ -50,6 +50,8 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
                 RestUtil.EMethod.GET
         );
 
+        _restUtil = null;
+
         return response.get(dummyToken);
     }
 
@@ -365,4 +367,66 @@ public class AvailableGenreSeedProcessor extends BaseProcessor {
     //endregion Tokens verification
 
     //endregion Verifications
+
+    //region Verifications for parallel tests
+
+    public AvailableGenreSeedProcessor verifyExpiredTokenErrorMessageResponded_WithParallelTest(
+            @NotNull List<Response> responses, List<String> expiredTokenUniqueIDs) {
+
+        if (responses.size() != expiredTokenUniqueIDs.size()) {
+            throw new IllegalArgumentException("There might be an error when executing automated script unfortunately!        ");
+        }
+
+        List<Boolean> assertions = null;
+
+        int idx;
+        for (idx = 0; idx < responses.size(); idx++) {
+
+            Response response = responses.get(idx);
+            String expiredTokenUniqueId = expiredTokenUniqueIDs.get(idx);
+
+            ErrorMessageModel errorMessageModel = response.getBody().as(ErrorMessageModel.class);
+
+            ErrorMessageModel.Error errorModel = errorMessageModel.getError();
+
+            int respondedStatusCode = errorModel.getStatus();
+            String respondedErrorMessage = errorModel.getMessage();
+
+            if (respondedStatusCode == apiConstant.UNAUTHORIZED &&
+                    Objects.equals(respondedErrorMessage, apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE)) {
+
+                LOGGER.info(StringUtil.appendStrings(Arrays.asList(
+                        "\nExpired token's unique id = ",
+                        expiredTokenUniqueId
+                )));
+                LOGGER.info(StringUtil.appendStrings(Arrays.asList(
+                        "\nThe response was successfully matched the expectations: ",
+                        "\nStatus code: ",
+                        String.valueOf(apiConstant.UNAUTHORIZED),
+                        "\nError message: ",
+                        apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE
+                )));
+
+                assertions.add(true);
+            }
+            else {
+
+                LOGGER.error(StringUtil.appendStrings(Arrays.asList(
+                        "\nThe response was not matched the expectations :(",
+                        "\nStatus code: [", String.valueOf(respondedStatusCode), "] >< [", String.valueOf(apiConstant.UNAUTHORIZED), "]",
+                        "\nError message: [", respondedErrorMessage, "] >< [", apiMessageConstant.EXPIRED_TOKEN_ERROR_MESSAGE, "]"
+                )));
+                LOGGER.error("Token's unique id that was expected to be an expired token = " + expiredTokenUniqueId);
+
+                assertions.add(false);
+            }
+        }
+
+        if (!assertions.contains(false)) verificationWentPassed();
+        else verificationWentFailed();
+
+        return this;
+    }
+
+    //endregion
 }

@@ -22,10 +22,6 @@ public class BaseProcessor extends BaseApiService implements IVerification {
 
     protected BaseProcessor() {}
 
-    protected BaseProcessor(RestUtil restProcessorUtil){
-        _restUtil = restProcessorUtil;
-    }
-
     //endregion
 
     //region Initializing const
@@ -34,7 +30,7 @@ public class BaseProcessor extends BaseApiService implements IVerification {
         apiConstant = new ApiConstant();
         apiMessageConstant = new ApiMessageConstant();
 
-        _restUtil = new RestUtil();
+        _restUtil = _restUtil == null ? new RestUtil() : _restUtil;
     }
 
     //endregion

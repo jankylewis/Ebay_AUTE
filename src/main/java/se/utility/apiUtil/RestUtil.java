@@ -1,5 +1,11 @@
 package se.utility.apiUtil;
 
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+//import io.restassured.config.HttpClientConfig;
+//import io.restassured.config.RestAssuredConfig;
+
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -22,13 +28,18 @@ public class RestUtil {
 
     //endregion
 
+//    private HttpClientConfig _httpClientConfig;
+//    private RestAssuredConfig _restAssuredConfig;
+//    private ThreadLocal<String> _accessTokens = new ThreadLocal<>();
+
     //region Introducing variables
 
+    private AuthenticationService _authenticationService;
+
     private RequestSpecification _requestSpecification;
+
     private Response _response;
     private JsonPath _jsonPath;
-
-    private AuthenticationService _authenticationProcessor;
 
     private String _requestUri;
 
@@ -38,7 +49,7 @@ public class RestUtil {
 
     {
         _requestSpecification = given();
-        _authenticationProcessor = new AuthenticationService();
+        _authenticationService = new AuthenticationService();
     }
 
     //endregion
@@ -105,7 +116,7 @@ public class RestUtil {
 
     private String setAccessToken() {
 
-        String accessToken = _authenticationProcessor.getAccessToken();
+        String accessToken = _authenticationService.getAccessToken();
 
         _requestSpecification
                 .given()
@@ -137,6 +148,8 @@ public class RestUtil {
             EMethod requestMethod
             ) {
 
+//        configureConnectionManager();
+
         setAccessToken(expectedToken);
 
         setRequestUri(requestUri);
@@ -158,6 +171,8 @@ public class RestUtil {
             case OPTIONS -> sendOptionsRequest();
         }
 
+//        releaseConnection();
+        
         return new HashMap<>(){{
             put(expectedToken, _response);
         }};
@@ -240,6 +255,28 @@ public class RestUtil {
     protected String getPropertyValue(String property) {
         _jsonPath = new JsonPath(_response.asPrettyString());
         return _jsonPath.get(property);
+    }
+
+    //endregion
+
+    //region Pre-request > Preparing a Connection Manager
+
+//    public void configureConnectionManager() {
+//        _httpClientConfig = new HttpClientConfig();
+//        _httpClientConfig.httpClientFactory(() -> HttpClients
+//                .custom()
+//                .setConnectionManager(new PoolingHttpClientConnectionManager())
+//                .build());
+//
+//        RestAssured.config = ((RestAssuredConfig) _httpClientConfig);
+//    }
+
+    //endregion
+
+    //region Post-request > Releasing connections properly after making a request
+
+    public void releaseConnection() {
+        RestAssured.reset();
     }
 
     //endregion

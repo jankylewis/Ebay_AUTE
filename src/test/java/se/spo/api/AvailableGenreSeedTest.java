@@ -8,9 +8,14 @@ import org.testng.annotations.Test;
 import se.requestProcessor.AvailableGenreSeedProcessor;
 import se.spo.api.testDataProvider.TestDataFactory;
 import se.spo.api.testDataProvider.TestDataFactory.AvailableGenreSeedDataProvider;
+import se.utility.ParallelUtil;
+import se.utility.apiUtil.RestUtil;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 public class AvailableGenreSeedTest extends BaseApiTestService {
 
@@ -101,13 +106,47 @@ public class AvailableGenreSeedTest extends BaseApiTestService {
     protected void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated(
             @NotNull Pair<String, String> expiredTokens) {
 
-
-
         //Making a request headed toward getting available genre seeds API with an expired token
         Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(expiredTokens.getValue1());
 
         availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded(dataResponded, expiredTokens.getValue0());
     }
+
+//    @Test(
+//            priority = 3,
+//            testName = "SAAVAILABLEGENRESEED_08",
+//            description = "Verify that the expired tokens shall not be authenticated"
+//    )
+//    protected void spotifyApiTest_VerifyTheExpiredTokensWereNotAuthenticated_WithParallelMode()
+//            throws IOException, InterruptedException {
+//
+//        TestDataFactory.AvailableGenreSeedDataProvider availableGenreSeedDataProvider = new AvailableGenreSeedDataProvider();
+//        List<Pair<String, String>> expiredTokenPairs = availableGenreSeedDataProvider.prepareExpiredTokens();
+//
+//        List<String> expiredTokens = expiredTokenPairs.stream().map(Pair::getValue1).collect(Collectors.toList());
+//        List<String> expiredTokenUniqueIDs = expiredTokenPairs.stream().map(Pair::getValue0).collect(Collectors.toList());
+//
+//        List<Response> responses = new ArrayList<>();
+//        List<Callable<Boolean>> tasks = new ArrayList<>();
+//
+//        for (int idx = 0; idx < expiredTokens.size(); idx++) {
+//
+//            int _idx = idx;
+//            String _expiredTokens = expiredTokens.get(_idx);
+//
+//            tasks.add(() -> {
+//
+//                //Making a request headed toward getting available genre seeds API with an expired token
+//                Response dataResponded = availableGenreSeedProcessor.getAvailableGenreSeed(_expiredTokens);
+//
+//                return responses.add(dataResponded);
+//            });
+//        }
+//
+//        new ParallelUtil()._parallelizeFunctions(tasks);
+//
+//        availableGenreSeedProcessor.verifyExpiredTokenErrorMessageResponded_WithParallelTest(responses, expiredTokenUniqueIDs);
+//    }
 
     @Test(
             priority = 3,
