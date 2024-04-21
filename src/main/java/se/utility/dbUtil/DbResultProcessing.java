@@ -59,6 +59,19 @@ public class DbResultProcessing {
         return models;
     }
 
+    //region Public services
+
+    public int getNumberOfRecords(@NotNull ResultSet resultSet) throws SQLException {
+
+        int recordCount = 0;
+        while(resultSet.next()) recordCount++;
+
+        if (recordCount > 0) return recordCount;
+        return -1;
+    }
+
+    //endregion
+
     //region Internal services
 
     private @NotNull String capitalizeWording(@NotNull String word) {

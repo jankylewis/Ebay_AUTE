@@ -43,7 +43,14 @@ public class DbManipulationUtil {
         if (_query == null)
             throw new SQLDataException("The query to be executed was empty!     ");
 
-        return _resultSet = _statement.executeQuery(_query);
+        _resultSet = _statement.executeQuery(_query);
+
+//        int count = 0;
+//        while (_resultSet.next()){
+//            count = _resultSet.getRow();
+//        }
+
+        return _resultSet;
     }
 
     //region Internal services
