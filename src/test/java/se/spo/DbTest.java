@@ -4,6 +4,7 @@ package se.spo;
 import se.model.dbModel.UserAuthenticationDbModel;
 import se.utility.dbUtil.DbConnectionService;
 import se.utility.dbUtil.DbManipulationUtil;
+import se.utility.dbUtil.DbResultProcessing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -46,6 +47,7 @@ public class DbTest {
             throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
         DbManipulationUtil dbManipulationUtil = new DbManipulationUtil();
         DbConnectionService dbConnectionService = new DbConnectionService();
+        DbResultProcessing dbResultProcessing = new DbResultProcessing();
 
         Connection connection = dbConnectionService.makeConnection();
 
@@ -53,7 +55,7 @@ public class DbTest {
 
         ResultSet resultSet = dbManipulationUtil.executeQuery(connection);
 
-        List<UserAuthenticationDbModel> userAuthenticationDbModels = dbManipulationUtil.mapResultSetToModelList(resultSet, UserAuthenticationDbModel.class);
+        List<UserAuthenticationDbModel> userAuthenticationDbModels = dbResultProcessing.mapResultSetToModelList(resultSet, UserAuthenticationDbModel.class);
 
         for (UserAuthenticationDbModel userAuthenticationDbModel : userAuthenticationDbModels) {
             System.out.println(userAuthenticationDbModel.getId());
@@ -62,7 +64,7 @@ public class DbTest {
             System.out.println(userAuthenticationDbModel.getGrantType());
         }
 
-        dbConnectionService.disposeResourcedSqlServices();
+        dbConnectionService.disposeResourcedSqlServices(dbManipulationUtil, dbResultProcessing);
     }
 }
 

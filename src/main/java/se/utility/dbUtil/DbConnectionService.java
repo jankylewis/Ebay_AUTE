@@ -1,12 +1,15 @@
 package se.utility.dbUtil;
 
 import com.microsoft.sqlserver.jdbc.ISQLServerConnection;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.UUID;
 
+//This class manipulates the connection to SQL Server namely creating or repelling connection
 public final class DbConnectionService {
 
     public DbConnectionService(){}
@@ -32,14 +35,23 @@ public final class DbConnectionService {
             _clientConnectionId = ((ISQLServerConnection)_connection).getClientConnectionId();
         } catch(SQLException sqlException) {
             throw new SQLException(
-                    "Error came up with SQL Server Connection: Client Connection ID = <" + _clientConnectionId + ">     "
+                    "SQL Error came up with SQL Server Connection: Client Connection ID = <" + _clientConnectionId + ">     "
             );
         }
         return _connection;
     }
 
-    public DbConnectionService disposeResourcedSqlServices() throws SQLException {
+    //Releasing all allocated SQL services
+    @Contract("_, _ -> this")
+    public DbConnectionService disposeResourcedSqlServices(
+            @NotNull DbManipulationUtil dbManipulationUtilInstance,
+            @NotNull DbResultProcessing dbResultProcessingInstance
+            ) throws SQLException {
+
+        dbManipulationUtilInstance.disposeStatement();
+        dbResultProcessingInstance.disposeResultSetService();
         _connection.close();
+
         return this;
     }
 }
