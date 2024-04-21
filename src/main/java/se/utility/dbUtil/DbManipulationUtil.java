@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLDataException;
 
+import se.commonHandler.constantHouse.dbConstant.UserAuthenticationConstant;
+
 //This class executes the expected queries from automated test scripts
 public class DbManipulationUtil {
 
@@ -18,6 +20,16 @@ public class DbManipulationUtil {
     private ResultSet _resultSet;
 
     private String _query;
+
+    private UserAuthenticationConstant _userAuthenticationConstant;
+
+    //region Preparing needed services
+
+    {
+        _userAuthenticationConstant = new UserAuthenticationConstant();
+    }
+
+    //endregion
 
     public String setQuery(String expQuery) {
         _query = expQuery;

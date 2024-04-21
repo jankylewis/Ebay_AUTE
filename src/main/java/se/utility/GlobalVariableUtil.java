@@ -24,7 +24,7 @@ public class GlobalVariableUtil extends PropertyFileReader {
 
     }
 
-    //endregion
+    //endregion Variables come from environment.properties
 
     //region Variables come from browser_configuration.properties
 
@@ -42,7 +42,7 @@ public class GlobalVariableUtil extends PropertyFileReader {
 
     }
 
-    //endregion
+    //endregion Variables come from browser_configuration.properties
 
     //region Variables come from user_credential.properties
 
@@ -63,7 +63,7 @@ public class GlobalVariableUtil extends PropertyFileReader {
         //endregion
     }
 
-    //endregion
+    //endregion Variables come from user_credential.properties
 
     //region Variables come from script_configuration.properties
 
@@ -84,7 +84,7 @@ public class GlobalVariableUtil extends PropertyFileReader {
         //endregion
     }
 
-    //endregion
+    //endregion Variables come from script_configuration.properties
 
     //region Variables come from api_credentials.properties
 
@@ -101,7 +101,26 @@ public class GlobalVariableUtil extends PropertyFileReader {
         //endregion
     }
 
-    //endregion
+    //endregion Variables come from api_credentials.properties
+
+    //region Variables come from db_credentials.properties file
+
+    public static class DbCredential {
+
+        //region Introducing global variables
+
+        private static final String FILE_PATH = "./src/main/java/se/globalVariable/db_credential.properties";
+
+        public static final String DB_CONNECTION_STRING = RESOURCE_READER.getPropertyFromGV("db_connection_string", FILE_PATH);
+        public static final String USERNAME = RESOURCE_READER.getPropertyFromGV("username", FILE_PATH);
+        public static final String PASSWORD = RESOURCE_READER.getPropertyFromGV("password", FILE_PATH);
+        public static final String JDBC_DRIVER = RESOURCE_READER.getPropertyFromGV("jdbc_driver", FILE_PATH);
+
+        //endregion
+
+    }
+
+    //endregion Variables come from db_credentials.properties file
 }
 
 

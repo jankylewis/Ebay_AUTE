@@ -9,17 +9,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import se.utility.GlobalVariableUtil.DbCredential;
+
 //This class manipulates the connection to SQL Server namely creating or repelling connection
 public final class DbConnectionService {
 
     public DbConnectionService(){}
 
-    private final String _dbConnectionString =
-            "jdbc:sqlserver://JANKYLEWIS\\SQLEXPRESS:1433;databaseName=SpotifyAutomationTestDb;trustServerCertificate=true;integratedSecurity=false";
-    private final String _username = "sa";
-    private final String _password = "123123";
+    private final String _dbConnectionString = DbCredential.DB_CONNECTION_STRING;
+    private final String _username = DbCredential.USERNAME;
+    private final String _password = DbCredential.PASSWORD;
 
-    private final String _jdbcDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    private final String _jdbcDriver = DbCredential.JDBC_DRIVER;
     private Connection _connection;
 
     private UUID _clientConnectionId;
