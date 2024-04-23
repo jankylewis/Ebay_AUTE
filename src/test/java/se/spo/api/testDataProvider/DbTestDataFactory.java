@@ -29,7 +29,7 @@ public class DbTestDataFactory {
     //region Queries introduction
 
     private final String SELECT_RECORD_1UP = "SELECT clientId FROM userAuthenticationTb WHERE (SELECT COUNT(clientId) FROM userAuthenticationTb) > 0";
-    private final String SELECT_ALL = "SELECT * FROM userAuthenticationTb";
+    private final String SELECT_ALL = "SELECT * FROM userAuthenticationTb"; //
 
     //endregion
 
