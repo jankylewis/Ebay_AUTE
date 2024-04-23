@@ -52,8 +52,6 @@ public class DbTestDataFactory {
 
         _dbResultProcessing.getNumberOfRecords(_resultSet);
 
-        
-
         if (_dbResultProcessing.getNumberOfRecords(_resultSet) != -1) {
             return _dbResultProcessing.mapResultSetToModelList(_resultSet, UserAuthenticationDbModel.class)
                     .stream()
