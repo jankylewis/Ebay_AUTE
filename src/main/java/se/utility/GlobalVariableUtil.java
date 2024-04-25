@@ -117,7 +117,6 @@ public class GlobalVariableUtil extends PropertyFileReader {
         public static final String JDBC_DRIVER = RESOURCE_READER.getPropertyFromGV("jdbc_driver", FILE_PATH);
 
         //endregion
-
     }
 
     //endregion Variables come from db_credentials.properties file
