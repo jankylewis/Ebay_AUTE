@@ -39,7 +39,6 @@ public class GlobalVariableUtil extends PropertyFileReader {
                 Boolean.parseBoolean(RESOURCE_READER.getPropertyFromGV("is_headless", FILE_PATH));
 
         //endregion
-
     }
 
     //endregion Variables come from browser_configuration.properties
