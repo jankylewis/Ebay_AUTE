@@ -15,7 +15,7 @@ public class YamlFileReader {
 
     private Map<String, List<Map<String, String>>> _apiData;
     private List<Map<String, String>> _apiCredentials;
-    private final String _apiYamlPath = "./src/main/java/se/dataManager/accountManager/api_account_credential.yaml";
+    private final String _apiYamlPath = "./src/main/java/se/dataManager/accountManager/api_credential.yaml";
 
     public List<?> retrieveCredentials() throws FileNotFoundException {
 
