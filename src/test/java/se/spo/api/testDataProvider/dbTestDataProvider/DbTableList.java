@@ -7,10 +7,10 @@ public class DbTableList {
         protected final String USER_AUTHENTICATION_TABLE = "userAuthenticationTb";
 
         //Listing columns
-        protected String clientId;
-        protected String clientSecret;
-        protected String grantType;
-        protected String beCreatedAt;
-        protected String beUsed;
+        protected String clientId = "clientId";
+        protected String clientSecret = "clientSecret";
+        protected String grantType = "grantType";
+        protected String beCreatedAt = "beCreatedAt";
+        protected String beUsed = "beUsed";
     }
 }

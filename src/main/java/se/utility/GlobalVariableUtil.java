@@ -92,7 +92,7 @@ public class GlobalVariableUtil extends PropertyFileReader {
         //region Introducing global variables
 
         //Providing api credentials' path
-        private static final String FILE_PATH = "./src/main/java/se/globalVariable/api_credential.properties";
+        private static final String FILE_PATH = "./src/main/java/se/globalVariable/api_config.properties";
         public static final String CLIENT_ID = RESOURCE_READER.getPropertyFromGV("client_id", FILE_PATH);
         public static final String CLIENT_SECRET = RESOURCE_READER.getPropertyFromGV("client_secret", FILE_PATH);
         public static final String CLIENT_APP = RESOURCE_READER.getPropertyFromGV("client_app", FILE_PATH);
@@ -119,6 +119,20 @@ public class GlobalVariableUtil extends PropertyFileReader {
     }
 
     //endregion Variables come from db_credentials.properties file
+
+    //region Variables come from api_config.properties file
+
+    public static class ApiRunConfigs {
+        private static final String FILE_PATH = "./src/main/java/se/dataManager/globalVariable/api_config.properties";
+
+        //region Introducing global variables
+
+        public static final String IDENTIFICATION_USED = RESOURCE_READER.getPropertyFromGV("identification_used", FILE_PATH);
+
+        //endregion Introducing global variables
+    }
+
+    //endregion Variables come from api_config.properties file
 }
 
 

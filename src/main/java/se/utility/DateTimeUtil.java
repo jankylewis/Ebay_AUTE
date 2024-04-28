@@ -3,12 +3,15 @@ package se.utility;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Objects;
 
 public class DateTimeUtil {
 
+    public final String YMDHMS_FORMAT =  "yyyy/MM/dd HH:mm:ss";
     public final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public LocalDate getCurrentDate() {
@@ -104,5 +107,13 @@ public class DateTimeUtil {
 
             throw new IllegalArgumentException("The desired month did not match any values!");
         }
+    }
+
+    public String getCurrentDateAsString(String dateTimeFormat) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateTimeFormat);
+        Date currentDate = new Date();
+
+        return simpleDateFormat.format(currentDate);
     }
 }

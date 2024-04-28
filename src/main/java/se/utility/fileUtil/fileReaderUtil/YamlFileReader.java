@@ -12,19 +12,23 @@ public class YamlFileReader {
 
     private Yaml _yaml;
     private InputStream _fileInputStream;
+    private Map<?, ?> _dataMap;
+    private String _yamlPath;
 
-    private Map<String, List<Map<String, String>>> _apiData;
-    private List<Map<String, String>> _apiCredentials;
-    private final String _apiYamlPath = "./src/main/java/se/dataManager/accountManager/api_credential.yaml";
+    public YamlFileReader(){
+        if (_yaml == null)
+            _yaml = new Yaml();
+    }
 
-    public List<?> retrieveCredentials() throws FileNotFoundException {
+    public void setYamlPath(String yamlPath) {
+        _yamlPath = yamlPath;
+    }
 
-        if (_yaml == null) _yaml = new Yaml();
+    public Map<?, ?> retrieveYamlMap() throws FileNotFoundException {
 
-        _fileInputStream = new FileInputStream(_apiYamlPath);
-        _apiData = _yaml.load(_fileInputStream);
-        _apiCredentials = _apiData.get("api_credentials");
+        _fileInputStream = new FileInputStream(_yamlPath);
+        _dataMap = _yaml.load(_fileInputStream);
 
-        return _apiCredentials;
+        return _dataMap;
     }
 }
