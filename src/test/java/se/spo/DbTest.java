@@ -2,6 +2,7 @@ package se.spo;
 
 //import se.utility.dbUtil.DbConnectionService;
 import se.model.dbModel.UserAuthenticationDbModel;
+import se.utility.GlobalVariableUtil;
 import se.utility.dbUtil.DbConnectionService;
 import se.utility.dbUtil.DbManipulationUtil;
 import se.utility.dbUtil.DbResultProcessing;
@@ -46,14 +47,14 @@ public class DbTest {
     public static void main (String[] args)
             throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
         DbManipulationUtil dbManipulationUtil = new DbManipulationUtil();
-        DbConnectionService dbConnectionService = new DbConnectionService();
+        DbConnectionService dbConnectionService = new DbConnectionService(GlobalVariableUtil.DbConfigs.DB_NAME_USED);
         DbResultProcessing dbResultProcessing = new DbResultProcessing();
 
         Connection connection = dbConnectionService.makeConnection();
 
         dbManipulationUtil.setQuery("SELECT * FROM userAuthenticationTb");
 
-        ResultSet resultSet = dbManipulationUtil.executeQuery(connection);
+        ResultSet resultSet = dbManipulationUtil.executeGetQuery(connection);
 
         List<UserAuthenticationDbModel> userAuthenticationDbModels = dbResultProcessing.mapResultSetToModelList(resultSet, UserAuthenticationDbModel.class);
 

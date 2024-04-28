@@ -8,6 +8,7 @@ import java.sql.Connection;
 
 import java.sql.SQLException;
 import java.sql.SQLDataException;
+import java.util.List;
 
 import se.commonHandler.constantHouse.dbConstant.UserAuthenticationConstant;
 
@@ -36,7 +37,9 @@ public class DbManipulationUtil {
         return expQuery;
     }
 
-    public ResultSet executeQuery(Connection connection) throws SQLException {
+    //region GET Query executions
+
+    public ResultSet executeGetQuery(Connection connection) throws SQLException {
 
         prepareStatement(connection);
 
@@ -45,18 +48,47 @@ public class DbManipulationUtil {
 
         _resultSet = _statement.executeQuery(_query);
 
-//        int count = 0;
-//        while (_resultSet.next()){
-//            count = _resultSet.getRow();
-//        }
+        return _resultSet;
+    }
+
+    public ResultSet executeGetQuery(Connection connection, int resultSetType, int resultSetConcurrencyType) throws SQLException {
+
+        prepareStatement(connection, resultSetType, resultSetConcurrencyType);
+
+        if (_query == null)
+            throw new SQLDataException("The query to be executed was empty!     ");
+
+        _resultSet = _statement.executeQuery(_query);
 
         return _resultSet;
+    }
+
+    //endregion GET Query executions
+
+    public DbManipulationUtil executeCudQuery(Connection connection) throws SQLException {
+
+        prepareStatement(connection);
+
+        if (_query == null)
+            throw new SQLDataException("The query to be executed was empty!     ");
+
+        _statement.executeQuery(_query);
+
+        return this;
     }
 
     //region Internal services
 
     private Statement prepareStatement(@NotNull Connection connection) throws SQLException {
-        return _statement = connection.createStatement();
+        return _statement = _statement == null ? connection.createStatement() : _statement;
+    }
+
+    private Statement prepareStatement(@NotNull Connection connection, int resultSetType, int resultSetConcurrencyType) throws SQLException {
+        return _statement = _statement == null ? connection.createStatement(resultSetType, resultSetConcurrencyType) : _statement;
+    }
+
+    private Statement prepareStatement(@NotNull Connection connection, int resultSetType, int resultSetConcurrencyType, int resultSetHoldabilityType) throws SQLException {
+        return _statement = _statement == null ? connection.createStatement(resultSetType, resultSetConcurrencyType, resultSetHoldabilityType) : _statement;
     }
 
     protected DbManipulationUtil disposeStatement() throws SQLException {

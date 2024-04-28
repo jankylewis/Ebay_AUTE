@@ -133,6 +133,20 @@ public class GlobalVariableUtil extends PropertyFileReader {
     }
 
     //endregion Variables come from api_config.properties file
+
+    //region Variables come from db_config.properties file
+
+    public static class DbConfigs {
+        private static final String FILE_PATH = "./src/main/java/se/dataManager/globalVariable/db_config.properties";
+
+        //region Introducing global variables
+
+        public static final String DB_NAME_USED = RESOURCE_READER.getPropertyFromGV("db_name_used", FILE_PATH);
+
+        //endregion Introducing global variables
+    }
+
+    //endregion Variables come from db_config.properties file
 }
 
 

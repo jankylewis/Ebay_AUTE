@@ -4,26 +4,50 @@ import com.microsoft.sqlserver.jdbc.ISQLServerConnection;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.UUID;
 
-import se.utility.GlobalVariableUtil.DbCredential;
+import se.credentialFactory.DbCredentialFactory;
 
 //This class manipulates the connection to SQL Server namely creating or repelling connection
 public final class DbConnectionService {
 
+    //A DbConnectionService constructor represents a DB manipulation going along within a program
     public DbConnectionService(){}
+    public DbConnectionService(String dbName){
 
-    private final String _dbConnectionString = DbCredential.DB_CONNECTION_STRING;
-    private final String _username = DbCredential.USERNAME;
-    private final String _password = DbCredential.PASSWORD;
+        try { _dbCredentialMap = _dbCredentialFactory.retrieveADbCredential(dbName); }
+        catch (FileNotFoundException fileNotFoundException) { throw new RuntimeException("Could not find the db file: " + fileNotFoundException); }
 
-    private final String _jdbcDriver = DbCredential.JDBC_DRIVER;
+        _dbConnectionString = _dbCredentialMap.get("db_connection_string");
+        _username = _dbCredentialMap.get("username");
+        _password = _dbCredentialMap.get("password");
+        _jdbcDriver = _dbCredentialMap.get("jdbc_driver");
+    }
+
+    private DbCredentialFactory _dbCredentialFactory;
+    private Map<String, String> _dbCredentialMap;
+
+    private String _dbConnectionString;
+    private String _username;
+    private String _password;
+    private String _jdbcDriver;
+
     private Connection _connection;
 
     private UUID _clientConnectionId;
+
+    //region Pre-setting DB services
+
+    {
+        _dbCredentialFactory = new DbCredentialFactory();
+    }
+
+    //endregion
 
     public Connection makeConnection() throws ClassNotFoundException, SQLException {
 

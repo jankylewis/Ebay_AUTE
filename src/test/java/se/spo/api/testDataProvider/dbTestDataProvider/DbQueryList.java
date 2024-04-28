@@ -24,25 +24,25 @@ public class DbQueryList {
 
         for (int idx = 0; idx < tableColumns.size(); idx++){
 
-            if (idx != tableColumns.size()) {
-                tableColumnsString += tableColumns.get(idx) + ", ";
-                continue;
+            if (idx == tableColumns.size() - 1) {
+                tableColumnsString += tableColumns.get(idx) + ") ";
+                break;
             }
 
-            tableColumnsString += tableColumns.get(idx) + ") ";
+            tableColumnsString += tableColumns.get(idx) + ", ";
         }
 
         for (int idx = 0; idx < tableData.size(); idx++){
 
-            if (idx != tableData.size()) {
-                tableDataString += handleApostrophe(tableData.get(idx)) + ", ";
-                continue;
+            if (idx == tableData.size() - 1) {
+                tableDataString += handleApostrophe(tableData.get(idx)) + ")";
+                break;
             }
 
-            tableDataString += handleApostrophe(tableData.get(idx)) + ")";
+            tableDataString += handleApostrophe(tableData.get(idx)) + ", ";
         }
 
-        return "INSERT INTO " + tableName + tableColumnsString + tableDataString;
+        return "INSERT INTO " + tableName + tableColumnsString + "VALUES "+ tableDataString;
     }
 
     //endregion INSERT queries

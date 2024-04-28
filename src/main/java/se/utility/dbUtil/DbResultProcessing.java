@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import java.sql.ResultSet;
@@ -70,7 +71,23 @@ public class DbResultProcessing {
         return -1;
     }
 
-    //endregion
+    public int getNumberOfRecords(@NotNull ResultSet resultSet, int resultSetType, int resultSetConcurrencyType) throws SQLException {
+
+        if (!(resultSet.getType() == (resultSetType)))
+            throw new SQLException("Scrollable ResultSet was not supported!     ");
+
+        int recordCount = 0;
+        while (resultSet.next()) {
+            recordCount++;
+        }
+
+        //Moving ResultSet cursor onto the first row
+        resultSet.beforeFirst();
+
+        return recordCount;
+    }
+
+    //endregion Public services
 
     //region Internal services
 
@@ -82,8 +99,11 @@ public class DbResultProcessing {
     private @Nullable Class<?> getColumnTypeAsClass(int primitiveType) throws SQLDataException {
 
         return switch (primitiveType) {
+
             case Types.INTEGER -> Integer.class;
             case Types.VARCHAR -> String.class;
+            case Types.TIMESTAMP -> Date.class;
+
             default -> throw new SQLDataException(
                     "SQLDataException came up with an unsupported SQL data type: " + primitiveType);
         };

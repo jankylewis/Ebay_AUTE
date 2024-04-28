@@ -3,6 +3,7 @@ package se.spo.api.testDataProvider.dbTestDataProvider;
 import org.jetbrains.annotations.Nullable;
 import se.credentialFactory.ApiCredentialFactory;
 import se.model.dbModel.UserAuthenticationDbModel;
+import se.utility.CaseFormatUtil;
 import se.utility.DateTimeUtil;
 import se.utility.GlobalVariableUtil;
 import se.utility.dbUtil.DbConnectionService;
@@ -43,7 +44,6 @@ public class DbTestDataFactory {
     //region Initializing services
 
     {
-        _dbConnectionService = new DbConnectionService();
         _dbManipulationUtil = new DbManipulationUtil();
         _dbResultProcessing = new DbResultProcessing();
         _dbQueryList = new DbQueryList();
@@ -61,20 +61,17 @@ public class DbTestDataFactory {
             NoSuchMethodException, InstantiationException, IllegalAccessException,
             FileNotFoundException {
 
+        _dbConnectionService = new DbConnectionService(GlobalVariableUtil.DbConfigs.DB_NAME_USED);
         _connection = _dbConnectionService.makeConnection();
-
         _dbManipulationUtil.setQuery(_dbQueryList.SELECT_ALL);
+        _resultSet = _dbManipulationUtil.executeGetQuery(_connection, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-        _resultSet = _dbManipulationUtil.executeQuery(_connection);
-
-        _dbResultProcessing.getNumberOfRecords(_resultSet);
-
-        if (_dbResultProcessing.getNumberOfRecords(_resultSet) != -1) {
+        if (_dbResultProcessing.getNumberOfRecords(_resultSet, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY) != -1) {
 
             //Mapping data to UserAuthenticationDbModel if data existed
             return _dbResultProcessing.mapResultSetToModelList(_resultSet, UserAuthenticationDbModel.class)
                     .stream()
-                    .filter(usr -> usr.grantType != "sample_grant_type")
+                    .filter(usr -> !usr.grantType.equals("sample_grant_type"))
                     .toList()
                     .get(0);
         } else {
@@ -89,18 +86,22 @@ public class DbTestDataFactory {
             String beCreatedAtStr = userAuthenticationTb.beCreatedAt.toString();
             String beUsedAtStr = userAuthenticationTb.beUsed.toString();
 
+            //Preparing an INSERT query
             String insertQuery = _dbQueryList.INSERT_VALUES(
                     userAuthenticationTb.USER_AUTHENTICATION_TABLE,
                     Arrays.asList(clientIdStr, clientSecretStr, grantTypeStr, beCreatedAtStr, beUsedAtStr),
-//                    Arrays.asList("ff4df67329594a35a57ad06dcd53605f", "363912205fc049b3b49d6210c08182f8", "client_credentials", "2024-04-22 10:30:00", 0)
-                    Arrays.asList(_anApiCredential.get(clientIdStr), _anApiCredential.get(clientSecretStr),
-                            _anApiCredential.get(grantTypeStr), _dateTimeUtil.getCurrentDateAsString(_dateTimeUtil.YMDHMS_FORMAT),
+                    Arrays.asList(
+                            _anApiCredential.get(CaseFormatUtil.convertCamelToSnakeCase(clientIdStr)),
+                            _anApiCredential.get(CaseFormatUtil.convertCamelToSnakeCase(clientSecretStr)),
+                            _anApiCredential.get(CaseFormatUtil.convertCamelToSnakeCase(grantTypeStr)),
+                            _dateTimeUtil.getCurrentDateAsString(_dateTimeUtil.YMDHMS_FORMAT),
                             0)
             );
 
             _dbManipulationUtil.setQuery(insertQuery);
+
             //Fulfilling new data into table if table was empty
-            _resultSet = _dbManipulationUtil.executeQuery(_connection);
+            _dbManipulationUtil.executeCudQuery(_connection);
         }
 
         return null;
@@ -114,7 +115,7 @@ public class DbTestDataFactory {
 
     //endregion
 
-    public static void main(String[] agrs) throws SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, FileNotFoundException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, FileNotFoundException {
         new DbTestDataFactory().getUserAuthenticationDbModel();
     }
 }

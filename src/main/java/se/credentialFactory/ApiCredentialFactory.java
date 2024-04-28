@@ -1,7 +1,6 @@
 package se.credentialFactory;
 
 import org.yaml.snakeyaml.Yaml;
-import se.utility.GlobalVariableUtil;
 import se.utility.fileUtil.fileReaderUtil.YamlFileReader;
 
 import java.io.FileInputStream;
@@ -62,8 +61,8 @@ public class ApiCredentialFactory {
         return mappedCredential;
     }
 
-    public static void main (String[] args) throws FileNotFoundException {
-        Map<String, String> data = new ApiCredentialFactory().retrieveAnApiCredential(GlobalVariableUtil.ApiRunConfigs.IDENTIFICATION_USED);
-        int i = 1;
-    }
+//    public static void main (String[] args) throws FileNotFoundException {
+//        Map<String, String> data = new ApiCredentialFactory().retrieveAnApiCredential(GlobalVariableUtil.ApiRunConfigs.IDENTIFICATION_USED);
+//        int i = 1;
+//    }
 }
