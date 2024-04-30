@@ -71,7 +71,7 @@ public class DbResultProcessing {
         return -1;
     }
 
-    public int getNumberOfRecords(@NotNull ResultSet resultSet, int resultSetType, int resultSetConcurrencyType) throws SQLException {
+    public int getNumberOfRecords(@NotNull ResultSet resultSet, int resultSetType) throws SQLException {
 
         if (!(resultSet.getType() == (resultSetType)))
             throw new SQLException("Scrollable ResultSet was not supported!     ");
@@ -84,7 +84,16 @@ public class DbResultProcessing {
         //Moving ResultSet cursor onto the first row
         resultSet.beforeFirst();
 
-        return recordCount;
+        if (recordCount > 0) return recordCount;
+        return -1;
+    }
+
+    public void moveCursorOntoFirstRow(ResultSet resultSet) throws SQLException {
+
+        if (!(resultSet.getType() == ResultSet.TYPE_SCROLL_SENSITIVE))
+            throw new SQLException("Scrollable ResultSet was not supported!     ");
+
+        resultSet.beforeFirst();
     }
 
     //endregion Public services
@@ -96,16 +105,16 @@ public class DbResultProcessing {
     }
 
     @Contract(pure = true)
-    private @Nullable Class<?> getColumnTypeAsClass(int primitiveType) throws SQLDataException {
+    private @Nullable Class<?> getColumnTypeAsClass(int dataType) throws SQLDataException {
 
-        return switch (primitiveType) {
+        return switch (dataType) {
 
             case Types.INTEGER -> Integer.class;
             case Types.VARCHAR -> String.class;
             case Types.TIMESTAMP -> Date.class;
 
-            default -> throw new SQLDataException(
-                    "SQLDataException came up with an unsupported SQL data type: " + primitiveType);
+            default -> throw new
+                    SQLDataException("SQLDataException came up with an unsupported SQL data type: " + dataType);
         };
     }
 

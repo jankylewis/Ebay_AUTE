@@ -8,7 +8,6 @@ import java.sql.Connection;
 
 import java.sql.SQLException;
 import java.sql.SQLDataException;
-import java.util.List;
 
 import se.commonHandler.constantHouse.dbConstant.UserAuthenticationConstant;
 
@@ -65,31 +64,49 @@ public class DbManipulationUtil {
 
     //endregion GET Query executions
 
-    public DbManipulationUtil executeCudQuery(Connection connection) throws SQLException {
+    public DbManipulationUtil executeCreateQuery(Connection connection) throws SQLException {
 
         prepareStatement(connection);
 
         if (_query == null)
             throw new SQLDataException("The query to be executed was empty!     ");
 
-        _statement.executeQuery(_query);
+        int rowsAffected = _statement.executeUpdate(_query);
+
+        if (rowsAffected > 0) return this;
+        else throw new SQLException("No rows affected and the insertion might have failed!   ");
+    }
+
+    public DbManipulationUtil executeUpdateQuery(Connection connection) throws SQLException {
+
+        prepareStatement(connection);
+
+        if (_query == null)
+            throw new SQLDataException("The query to be executed was empty!     ");
+
+        _statement.executeUpdate(_query);
 
         return this;
     }
 
-    //region Internal services
-
-    private Statement prepareStatement(@NotNull Connection connection) throws SQLException {
+    public Statement prepareStatement(@NotNull Connection connection) throws SQLException {
         return _statement = _statement == null ? connection.createStatement() : _statement;
     }
 
-    private Statement prepareStatement(@NotNull Connection connection, int resultSetType, int resultSetConcurrencyType) throws SQLException {
+    public Statement prepareStatement(@NotNull Connection connection, int resultSetType, int resultSetConcurrencyType) throws SQLException {
         return _statement = _statement == null ? connection.createStatement(resultSetType, resultSetConcurrencyType) : _statement;
     }
 
-    private Statement prepareStatement(@NotNull Connection connection, int resultSetType, int resultSetConcurrencyType, int resultSetHoldabilityType) throws SQLException {
+    public Statement prepareStatement(@NotNull Connection connection, int resultSetType, int resultSetConcurrencyType, int resultSetHoldabilityType) throws SQLException {
         return _statement = _statement == null ? connection.createStatement(resultSetType, resultSetConcurrencyType, resultSetHoldabilityType) : _statement;
     }
+
+    public DbManipulationUtil resetStatementToDefaultValue() {
+        _statement = null;
+        return this;
+    }
+
+    //region Internal services
 
     protected DbManipulationUtil disposeStatement() throws SQLException {
         _statement.close();

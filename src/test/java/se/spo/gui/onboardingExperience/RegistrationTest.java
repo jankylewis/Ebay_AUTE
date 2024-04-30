@@ -145,7 +145,7 @@ public class RegistrationTest extends BaseTestService {
                 faker.produceFakeName(),
                 dateTimeUtil.getDayOfCurrentDate(userBirthDate),
                 dateTimeUtil.getMonthOfCurrentDate(userBirthDate),
-                dateTimeUtil.getCurrentDate().plusYears(1).getYear(),
+                dateTimeUtil.getCurrentLocalDate().plusYears(1).getYear(),
                 listOfGenders.get(randomizer.nextInt(0, listOfGenders.size() - 1))
         );
 

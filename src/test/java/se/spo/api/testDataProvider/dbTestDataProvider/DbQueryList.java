@@ -1,5 +1,6 @@
 package se.spo.api.testDataProvider.dbTestDataProvider;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,35 +18,46 @@ public class DbQueryList {
 
     //region INSERT queries
 
-    protected final @NotNull String INSERT_VALUES(String tableName, @NotNull List<String> tableColumns, List<Object> tableData){
+    protected final @NotNull String INSERT_VALUES(String table, @NotNull List<String> columns, List<Object> columnData){
 
         String tableColumnsString = "(";
         String tableDataString = "(";
 
-        for (int idx = 0; idx < tableColumns.size(); idx++){
+        for (int idx = 0; idx < columns.size(); idx++){
 
-            if (idx == tableColumns.size() - 1) {
-                tableColumnsString += tableColumns.get(idx) + ") ";
+            if (idx == columns.size() - 1) {
+                tableColumnsString += columns.get(idx) + ") ";
                 break;
             }
 
-            tableColumnsString += tableColumns.get(idx) + ", ";
+            tableColumnsString += columns.get(idx) + ", ";
         }
 
-        for (int idx = 0; idx < tableData.size(); idx++){
+        for (int idx = 0; idx < columnData.size(); idx++){
 
-            if (idx == tableData.size() - 1) {
-                tableDataString += handleApostrophe(tableData.get(idx)) + ")";
+            if (idx == columnData.size() - 1) {
+                tableDataString += handleApostrophe(columnData.get(idx)) + ")";
                 break;
             }
 
-            tableDataString += handleApostrophe(tableData.get(idx)) + ", ";
+            tableDataString += handleApostrophe(columnData.get(idx)) + ", ";
         }
 
-        return "INSERT INTO " + tableName + tableColumnsString + "VALUES "+ tableDataString;
+        return "INSERT INTO " + table + tableColumnsString + "VALUES "+ tableDataString;
     }
 
     //endregion INSERT queries
+
+    //region UPDATE queries
+
+    @Contract(pure = true)
+    protected final @NotNull String UPDATE(
+            String table, String updatedColumn, String columnAtCondition, Object updatedValue, Object condition) {
+
+        return "UPDATE " + table + " SET " + updatedColumn + " = " + updatedValue + " WHERE " + columnAtCondition + " = " + handleApostrophe(condition);
+    }
+
+    //endregion UPDATE queries
 
     private @NotNull Object handleApostrophe(@NotNull Object handledObject) {
 
