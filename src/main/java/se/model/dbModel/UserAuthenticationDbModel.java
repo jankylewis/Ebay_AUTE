@@ -1,6 +1,7 @@
 package se.model.dbModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
@@ -12,6 +13,16 @@ public class UserAuthenticationDbModel {
     public @NotNull String grantType;
     public @NotNull Date beCreatedAt;
     public @NotNull Integer beUsed;
+
+    public @Nullable Date getLastUsedAt() {
+        return lastUsedAt;
+    }
+
+    public void setLastUsedAt(@Nullable Date lastUsedAt) {
+        this.lastUsedAt = lastUsedAt;
+    }
+
+    public @Nullable Date lastUsedAt;
 
     public Date getBeCreatedAt() {
         return beCreatedAt;

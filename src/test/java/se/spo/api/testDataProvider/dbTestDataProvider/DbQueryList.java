@@ -57,6 +57,21 @@ public class DbQueryList {
         return "UPDATE " + table + " SET " + updatedColumn + " = " + updatedValue + " WHERE " + columnAtCondition + " = " + handleApostrophe(condition);
     }
 
+    protected final @NotNull String UPDATE(
+            String table, @NotNull List<String> updatedColumns, String columnAtCondition, List<Object> updatedValues, Object condition) {
+
+        String setClause = " SET ";
+        for (int idx = 0; idx < updatedColumns.size(); idx++) {
+
+            if (idx == updatedColumns.size() - 1)
+                setClause += updatedColumns.get(idx) + " = " + updatedValues.get(idx);
+
+            setClause += updatedColumns.get(idx) + " = " + updatedValues.get(idx) + ", ";
+        }
+
+        return "UPDATE " + table + setClause + " WHERE " + columnAtCondition + " = " + handleApostrophe(condition);
+    }
+
     //endregion UPDATE queries
 
     //region DELETE queries

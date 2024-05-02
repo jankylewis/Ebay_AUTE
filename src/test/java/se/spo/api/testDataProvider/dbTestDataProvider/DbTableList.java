@@ -12,5 +12,6 @@ public class DbTableList {
         protected String grantType = "grantType";
         protected String beCreatedAt = "beCreatedAt";
         protected String beUsed = "beUsed";
+        protected String lastUsedAt = "lastUsedAt";
     }
 }

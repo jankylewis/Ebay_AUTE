@@ -79,7 +79,7 @@ public class DbTestDataFactory {
 
         if (_dbResultProcessing.getNumberOfRecords(_resultSet, ResultSet.TYPE_SCROLL_SENSITIVE) != -1) {
 
-            String expectedClientId = _anApiCredential.get(_anApiCredential.get(CaseFormatUtil.convertCamelToSnakeCase(_userAuthenticationTable.clientId.toString())));
+            String expectedClientId = _anApiCredential.get(CaseFormatUtil.convertCamelToSnakeCase(_userAuthenticationTable.clientId));
 
             //Mapping data filling UserAuthenticationDbModel based off the first record if records existed
             return _dbResultProcessing.mapResultSetToModelList(_resultSet, UserAuthenticationDbModel.class)
@@ -87,6 +87,7 @@ public class DbTestDataFactory {
                     .filter(usr -> usr.clientId.equals(expectedClientId))
                     .toList()
                     .get(0);
+
         } else {
 
             String clientIdStr = _userAuthenticationTable.clientId.toString();
@@ -128,11 +129,27 @@ public class DbTestDataFactory {
     public DbTestDataFactory cleanUserAuthenticationDb(@NotNull UserAuthenticationDbModel userAuthenticationDbModel) throws SQLException {
 
         //Preparing an UPDATE query
+//        String updateQuery = _dbQueryList.UPDATE(
+//                _userAuthenticationTable.USER_AUTHENTICATION_TABLE,
+//                _userAuthenticationTable.beUsed.toString(),
+//                _userAuthenticationTable.beCreatedAt,
+//                userAuthenticationDbModel.beUsed += 1,
+//                _dateTimeUtil.convertDateToCorrectFormat(userAuthenticationDbModel.getBeCreatedAt(), _dateTimeUtil.HYPHENATED_YMDHMS_FORMAT)
+//        );
+
+        userAuthenticationDbModel.setLastUsedAt(_dateTimeUtil.getCurrentDate());
+
         String updateQuery = _dbQueryList.UPDATE(
                 _userAuthenticationTable.USER_AUTHENTICATION_TABLE,
-                _userAuthenticationTable.beUsed.toString(),
+                Arrays.asList(
+                        _userAuthenticationTable.beUsed,
+                        _userAuthenticationTable.lastUsedAt
+                ),
                 _userAuthenticationTable.beCreatedAt,
-                userAuthenticationDbModel.beUsed += 1,
+                Arrays.asList(
+                        userAuthenticationDbModel.beUsed += 1,
+                        userAuthenticationDbModel.getLastUsedAt()
+                ),
                 _dateTimeUtil.convertDateToCorrectFormat(userAuthenticationDbModel.getBeCreatedAt(), _dateTimeUtil.HYPHENATED_YMDHMS_FORMAT)
         );
 

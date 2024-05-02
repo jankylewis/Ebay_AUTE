@@ -2,22 +2,32 @@ package se.requestProcessor;
 
 import io.restassured.response.Response;
 import org.javatuples.Pair;
+import se.model.apiModel.requestModel.AuthenticationModel;
 import se.utility.apiUtil.RestUtil;
 
 import java.util.Map;
 
 public class TrackRecommendationProcessor extends BaseProcessor {
 
+    private AuthenticationModel _authenticationModel;
+
     public TrackRecommendationProcessor() {
         super();
     }
 
+    //API credentials assignment
+    public TrackRecommendationProcessor(AuthenticationModel authenticationModel) {
+        _authenticationModel = authenticationModel;
+    }
+
     private final String trackRecommendationUri = "https://api.spotify.com/v1/recommendations";
 
-    public Response getTrackRecommendationsSuccessfully() {
+    public Response getTrackRecommendationsSuccessfully(Map<String, Object> expParametersMap) {
 
         Response response = _restUtil.sendAuthenticatedRequestWithResponse(
+                _authenticationModel,
                 trackRecommendationUri,
+                expParametersMap,
                 null,
                 null,
                 RestUtil.EMethod.GET
@@ -52,7 +62,7 @@ public class TrackRecommendationProcessor extends BaseProcessor {
         }
     }
 
-    public void verifyBrowseCategoriesRequestRespondedWith401SttCode(Response response) {
+    public void verifyTrackRecommendationsRequestRespondedWith401SttCode(Response response) {
 
         Pair<Boolean, Integer> responseHealth = verifyResponseStatusCodeWent401(response);
 
