@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="API Regression Suite > Parallel TSs"
+       parallel="tests"
+       thread-count="20">
+
+    <test name="API Regression Test">
+
+        <classes>
+            <class name="se.spo.api.TrackRecommendationTest"></class>
+            <class name="se.spo.api.MarketTest"></class>
+        </classes>
+
+    </test>
+
+</suite>
