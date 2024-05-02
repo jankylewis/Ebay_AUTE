@@ -61,10 +61,18 @@ public class BaseProcessor extends BaseApiService implements IVerification {
         return Pair.with(responseHealth, responseStatusCode);
     }
 
-    protected Pair<Boolean, Integer> verifyResponseStatusCodeWent401(@NotNull Response response) {
+    protected Pair<Boolean, Integer> verifyResponseStatusCodeWent400(@NotNull Response response) {
 
         responseStatusCode = response.statusCode();
         responseHealth = responseStatusCode == apiConstant.UNSUPPORTED_AUTHENTICATION_SERVICE;
+
+        return Pair.with(responseHealth, responseStatusCode);
+    }
+
+    protected Pair<Boolean, Integer> verifyResponseStatusCodeWent401(@NotNull Response response) {
+
+        responseStatusCode = response.statusCode();
+        responseHealth = responseStatusCode == apiConstant.UNAUTHORIZED;
 
         return Pair.with(responseHealth, responseStatusCode);
     }

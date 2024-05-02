@@ -1,7 +1,5 @@
 package se.commonHandler.constantHouse.apiConstant;
 
-import jdk.jfr.Description;
-
 public class ApiConstant {
 
     //region Response codes

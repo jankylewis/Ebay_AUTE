@@ -89,6 +89,18 @@ public class DbManipulationUtil {
         return this;
     }
 
+    public DbManipulationUtil executeDeleteQuery(Connection connection) throws SQLException {
+
+        prepareStatement(connection);
+
+        if (_query == null)
+            throw new SQLDataException("The query to be executed was empty!     ");
+
+        _statement.executeUpdate(_query);
+
+        return this;
+    }
+
     public Statement prepareStatement(@NotNull Connection connection) throws SQLException {
         return _statement = _statement == null ? connection.createStatement() : _statement;
     }

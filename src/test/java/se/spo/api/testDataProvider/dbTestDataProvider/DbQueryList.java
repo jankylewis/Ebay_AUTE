@@ -59,6 +59,14 @@ public class DbQueryList {
 
     //endregion UPDATE queries
 
+    //region DELETE queries
+
+    protected final @NotNull String DELETE_ALL_RECORDS_FROM_TABLE(String table, String aColumnName) {
+        return "DELETE FROM " + table + " WHERE (SELECT COUNT(" + aColumnName + ") FROM " + table + ") > 0";
+    }
+
+    //endregion DELETE queries
+
     private @NotNull Object handleApostrophe(@NotNull Object handledObject) {
 
         Class<?> objectClassType = handledObject.getClass();

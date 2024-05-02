@@ -60,9 +60,4 @@ public class ApiCredentialFactory {
 
         return mappedCredential;
     }
-
-//    public static void main (String[] args) throws FileNotFoundException {
-//        Map<String, String> data = new ApiCredentialFactory().retrieveAnApiCredential(GlobalVariableUtil.ApiRunConfigs.IDENTIFICATION_USED);
-//        int i = 1;
-//    }
 }

@@ -75,7 +75,7 @@ public class SingleCategoryProcessor extends BaseProcessor {
 
     public void verifyUserWasNotAuthenticatedWhenNoTokenProvided(Response response) {
 
-        Pair<Boolean, Integer> result = verifyResponseStatusCodeWent401(response);
+        Pair<Boolean, Integer> result = verifyResponseStatusCodeWent400(response);
 
         if (result.getValue0()) {
             LOGGER.info("Actual status code equals Expected status code: "
