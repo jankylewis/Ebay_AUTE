@@ -3,21 +3,34 @@ package se.utility;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Objects;
 
 public class DateTimeUtil {
 
+    public final String YMDHMS_FORMAT =  "yyyy/MM/dd HH:mm:ss";
+    public final String HYPHENATED_YMDHMS_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public LocalDate getCurrentDate() {
+    public LocalDate getCurrentLocalDate() {
         return LocalDate.now();
     }
 
-    public String convertDateToCorrectFormat(@NotNull LocalDate expDate, String expFormat) {
+    public Date getCurrentDate() {
+        return new Date();
+    }
+
+    public String convertLocalDateToCorrectFormat(@NotNull LocalDate expDate, String expFormat) {
         DateTimeFormatter _expFormat = DateTimeFormatter.ofPattern(expFormat);
         return expDate.format(_expFormat);
+    }
+
+    public String convertDateToCorrectFormat(Date expDate, String expFormat) {
+        SimpleDateFormat _expFormat = new SimpleDateFormat(expFormat);
+        return _expFormat.format(expDate);
     }
 
    public int getDayOfCurrentDate(@NotNull LocalDate expDate) {
@@ -104,5 +117,13 @@ public class DateTimeUtil {
 
             throw new IllegalArgumentException("The desired month did not match any values!");
         }
+    }
+
+    public String getCurrentDateAsString(String dateTimeFormat) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateTimeFormat);
+        Date currentDate = getCurrentDate();
+
+        return simpleDateFormat.format(currentDate);
     }
 }

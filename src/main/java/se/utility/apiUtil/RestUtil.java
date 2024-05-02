@@ -1,11 +1,5 @@
 package se.utility.apiUtil;
 
-//import org.apache.http.impl.client.HttpClients;
-//import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-//import io.restassured.config.HttpClientConfig;
-//import io.restassured.config.RestAssuredConfig;
-
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -13,10 +7,12 @@ import io.restassured.specification.RequestSpecification;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import se.model.apiModel.requestModel.AuthenticationModel;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
@@ -28,10 +24,6 @@ public class RestUtil {
 
     //endregion
 
-//    private HttpClientConfig _httpClientConfig;
-//    private RestAssuredConfig _restAssuredConfig;
-//    private ThreadLocal<String> _accessTokens = new ThreadLocal<>();
-
     //region Introducing variables
 
     private AuthenticationService _authenticationService;
@@ -42,6 +34,8 @@ public class RestUtil {
     private JsonPath _jsonPath;
 
     private String _requestUri;
+
+//    private HttpClientConfig _httpClientConfig;
 
     //endregion
 
@@ -62,6 +56,18 @@ public class RestUtil {
 
     //endregion
 
+    //region Pre-request services
+
+    //region Processing query parameters
+
+    private RequestSpecification mapQueryParameters(Map<String, Object> parametersMap) {
+
+        _requestSpecification.queryParams(parametersMap);
+        return _requestSpecification;
+    }
+
+    //endregion Processing query parameters
+
     //region Processing payloads
 
     private RequestSpecification buildUrlencodedForm(@NotNull Collection<Pair<Object, Object>> pairs) {
@@ -79,6 +85,8 @@ public class RestUtil {
     }
 
     //endregion
+
+    //endregion Pre-request services
 
     //region Services for sending requests
 
@@ -134,7 +142,18 @@ public class RestUtil {
         return expectedToken;
     }
 
-    //endregion
+    private String setAccessToken(AuthenticationModel apiAuthenticationModel) {
+
+        String accessToken = _authenticationService.getAccessToken(apiAuthenticationModel);
+
+        _requestSpecification
+                .given()
+                .header("Authorization", "Bearer " + accessToken);
+
+        return accessToken;
+    }
+
+    //endregion Processing tokens
 
     //region Processing requests
 
@@ -147,8 +166,6 @@ public class RestUtil {
             @Nullable ContentType requestContentType,
             EMethod requestMethod
             ) {
-
-//        configureConnectionManager();
 
         setAccessToken(expectedToken);
 
@@ -169,16 +186,57 @@ public class RestUtil {
             case PATCH -> sendPatchRequest();
             case DELETE -> sendDeleteRequest();
             case OPTIONS -> sendOptionsRequest();
+            default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
         }
-
-//        releaseConnection();
         
         return new HashMap<>(){{
             put(expectedToken, _response);
         }};
     }
 
-    //endregion
+    //endregion Sending with a desired token
+
+    //region Processing request with an API Authentication Model
+
+    public Response sendAuthenticatedRequestWithResponse(
+            AuthenticationModel apiAuthenticationModel,
+            String requestUri,
+            Map<String, Object> parametersMap,
+            Collection<Pair<Object, Object>> requestBody,
+            ContentType requestContentType,
+            EMethod requestMethod
+    ) {
+
+        //Retrieving access token with a desired API Authentication Model
+        setAccessToken(apiAuthenticationModel);
+
+        setRequestUri(requestUri);
+
+        if (parametersMap != null)
+            mapQueryParameters(parametersMap);
+
+        //Invoking a requested body if needed
+        if (requestContentType != null && requestBody != null)
+            switch (requestContentType) {
+                case URLENC -> buildUrlencodedForm(requestBody);
+            }
+
+        switch (requestMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+            case PUT -> sendPutRequest();
+            case HEAD -> sendHeadRequest();
+            case PATCH -> sendPatchRequest();
+            case DELETE -> sendDeleteRequest();
+            case OPTIONS -> sendOptionsRequest();
+
+            default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
+        }
+
+        return _response;
+    }
+
+    //endregion Sending with an API Authentication Model
 
     //region Sending with an authenticated token
 
@@ -208,6 +266,7 @@ public class RestUtil {
             case PATCH -> sendPatchRequest();
             case DELETE -> sendDeleteRequest();
             case OPTIONS -> sendOptionsRequest();
+            default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
         }
 
         return _response;
@@ -241,6 +300,7 @@ public class RestUtil {
             case PATCH -> sendPatchRequest();
             case DELETE -> sendDeleteRequest();
             case OPTIONS -> sendOptionsRequest();
+            default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
         };
 
         return _response;
@@ -267,7 +327,7 @@ public class RestUtil {
 //                .custom()
 //                .setConnectionManager(new PoolingHttpClientConnectionManager())
 //                .build());
-//
+
 //        RestAssured.config = ((RestAssuredConfig) _httpClientConfig);
 //    }
 
@@ -275,9 +335,9 @@ public class RestUtil {
 
     //region Post-request > Releasing connections properly after making a request
 
-    public void releaseConnection() {
-        RestAssured.reset();
-    }
+//    public void releaseConnection() {
+//        RestAssured.reset();
+//    }
 
     //endregion
 
