@@ -13,6 +13,7 @@ public class UserAuthenticationDbModel {
     public @NotNull String grantType;
     public @NotNull Date beCreatedAt;
     public @NotNull Integer beUsed;
+    public @Nullable Date lastUsedAt;
 
     public @Nullable Date getLastUsedAt() {
         return lastUsedAt;
@@ -21,8 +22,6 @@ public class UserAuthenticationDbModel {
     public void setLastUsedAt(@Nullable Date lastUsedAt) {
         this.lastUsedAt = lastUsedAt;
     }
-
-    public @Nullable Date lastUsedAt;
 
     public Date getBeCreatedAt() {
         return beCreatedAt;
