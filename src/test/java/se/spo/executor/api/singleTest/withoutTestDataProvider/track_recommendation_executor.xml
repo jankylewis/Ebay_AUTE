@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="API Test > Track Recommendations Tests"
+       parallel="tests"
+       thread-count="2">
+
+    <!--region Unsuccessful processing-->
+
+    <test name="SATRACKRECOMMENDATIONS_02">
+        <classes>
+            <class name="se.spo.api.TrackRecommendationTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestWithRedResponseCode"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!--endregion-->
+
+    <!--region Successful processing-->
+
+    <test name="SATRACKRECOMMENDATIONS_01">
+        <classes>
+            <class name="se.spo.api.TrackRecommendationTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestWithGreenResponseCode"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!--endregion-->
+
+</suite>

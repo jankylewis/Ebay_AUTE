@@ -16,7 +16,7 @@ public class BaseApiTestService extends BaseApiService {
     protected DbTestDataFactory dbTestDataFactory;
 
     @BeforeTest
-    protected void testInitialization()
+    protected void baseTestInitialization()
             throws SQLException, FileNotFoundException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
         dbTestDataFactory = new DbTestDataFactory();
@@ -24,7 +24,7 @@ public class BaseApiTestService extends BaseApiService {
     }
 
     @AfterTest
-    protected void testCleaning() throws SQLException {
+    protected void baseTestCleaning() throws SQLException {
         dbTestDataFactory.cleanUserAuthenticationDb(userAuthenticationDbModel);
     }
 }

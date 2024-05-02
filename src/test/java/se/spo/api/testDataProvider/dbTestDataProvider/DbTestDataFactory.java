@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DbTestDataFactory {
 
@@ -85,9 +86,8 @@ public class DbTestDataFactory {
             return _dbResultProcessing.mapResultSetToModelList(_resultSet, UserAuthenticationDbModel.class)
                     .stream()
                     .filter(usr -> usr.clientId.equals(expectedClientId))
-                    .toList()
+                    .collect(Collectors.toUnmodifiableList())
                     .get(0);
-
         } else {
 
             String clientIdStr = _userAuthenticationTable.clientId.toString();
@@ -128,17 +128,9 @@ public class DbTestDataFactory {
 
     public DbTestDataFactory cleanUserAuthenticationDb(@NotNull UserAuthenticationDbModel userAuthenticationDbModel) throws SQLException {
 
-        //Preparing an UPDATE query
-//        String updateQuery = _dbQueryList.UPDATE(
-//                _userAuthenticationTable.USER_AUTHENTICATION_TABLE,
-//                _userAuthenticationTable.beUsed.toString(),
-//                _userAuthenticationTable.beCreatedAt,
-//                userAuthenticationDbModel.beUsed += 1,
-//                _dateTimeUtil.convertDateToCorrectFormat(userAuthenticationDbModel.getBeCreatedAt(), _dateTimeUtil.HYPHENATED_YMDHMS_FORMAT)
-//        );
-
         userAuthenticationDbModel.setLastUsedAt(_dateTimeUtil.getCurrentDate());
 
+        //Preparing an UPDATE query
         String updateQuery = _dbQueryList.UPDATE(
                 _userAuthenticationTable.USER_AUTHENTICATION_TABLE,
                 Arrays.asList(
@@ -148,7 +140,7 @@ public class DbTestDataFactory {
                 _userAuthenticationTable.beCreatedAt,
                 Arrays.asList(
                         userAuthenticationDbModel.beUsed += 1,
-                        userAuthenticationDbModel.getLastUsedAt()
+                        _dateTimeUtil.convertDateToCorrectFormat(userAuthenticationDbModel.getLastUsedAt(), _dateTimeUtil.HYPHENATED_YMDHMS_FORMAT)
                 ),
                 _dateTimeUtil.convertDateToCorrectFormat(userAuthenticationDbModel.getBeCreatedAt(), _dateTimeUtil.HYPHENATED_YMDHMS_FORMAT)
         );

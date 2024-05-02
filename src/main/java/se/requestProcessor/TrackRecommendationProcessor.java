@@ -36,29 +36,34 @@ public class TrackRecommendationProcessor extends BaseProcessor {
         return response;
     }
 
-    public Response getTrackRecommendationsUnsuccessfullyWithAnInvalidToken(String invalidToken) {
+    public Response getTrackRecommendationsUnsuccessfullyWithoutQueryParameters() {
 
-        Map<String, Response> response =
-                (Map<String, Response>) _restUtil.sendAuthenticatedRequestWithResponse(
-                invalidToken,
+        Response response = _restUtil.sendAuthenticatedRequestWithResponse(
+                _authenticationModel,
                 trackRecommendationUri,
+                null,
                 null,
                 null,
                 RestUtil.EMethod.GET
         );
 
-        return response.get(invalidToken);
+        return response;
     }
 
     public void verifyGettingTrackRecommendationsSuccessfully(Response response) {
 
         Pair<Boolean, Integer> responseHealth = verifyResponseStatusCodeWentGreen(response);
 
-        if (responseHealth.getValue0()) verificationWentPassed();
-        else {
-            LOGGER.error("Response status code came different with the expected status code! ");
-            LOGGER.info("Actual status code >< Expected status code: " + responseHealth.getValue1() + " >< " + apiConstant.GREEN_STATUS);
-            verificationWentFailed();
+        try {
+            if (responseHealth.getValue0()) verificationWentPassed();
+            else {
+                LOGGER.error("Response status code came different with the expected status code! ");
+                LOGGER.info("Actual status code >< Expected status code: " + responseHealth.getValue1() + " >< " + apiConstant.GREEN_STATUS);
+
+                verificationWentFailed();
+            }
+        } catch(AssertionError aeEx) {
+            throw aeEx;
         }
     }
 
@@ -70,6 +75,19 @@ public class TrackRecommendationProcessor extends BaseProcessor {
         else {
             LOGGER.error("Response status code came different with the expected status code! ");
             LOGGER.info("Actual status code >< Expected status code: " + responseHealth.getValue1() + " >< " + apiConstant.UNAUTHORIZED);
+            verificationWentFailed();
+        }
+    }
+
+    public void verifyTrackRecommendationsRequestRespondedWith400SttCode(Response response) {
+
+        Pair<Boolean, Integer> responseHealth = verifyResponseStatusCodeWent400(response);
+
+        if (responseHealth.getValue0()) verificationWentPassed();
+        else {
+            LOGGER.error("Response status code came different with the expected status code! ");
+            LOGGER.info("Actual status code >< Expected status code: " + responseHealth.getValue1() + " >< " + apiConstant.INVALID_REQUEST);
+
             verificationWentFailed();
         }
     }

@@ -1,8 +1,6 @@
 package se.spo.api;
 
 import io.restassured.response.Response;
-import org.javatuples.Pair;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import se.model.apiModel.requestModel.AuthenticationModel;
@@ -17,7 +15,7 @@ public class TrackRecommendationTest extends BaseApiTestService {
     @Test(
             priority = 1,
             testName = "SATRACKRECOMMENDATIONS_01",
-            description = "Verify Api was SUCCESSFULLY processed when being hit by a request"
+            description = "Verify Api was SUCCESSFULLY processed when being hit by a request with query parameters"
     )
     protected void spotifyApiTest_VerifyApiProcessedRequestWithGreenResponseCode() {
 
@@ -29,6 +27,17 @@ public class TrackRecommendationTest extends BaseApiTestService {
         trackRecommendationProcessor.verifyGettingTrackRecommendationsSuccessfully(dataRetrieved);
     }
 
+    @Test(
+            priority = 2,
+            testName = "SATRACKRECOMMENDATIONS_02",
+            description = "Verify Api was UNSUCCESSFULLY processed when being hit by a request without query parameters"
+    )
+    protected void spotifyApiTest_VerifyApiProcessedRequestWithRedResponseCode() {
+
+        Response dataRetrieved = trackRecommendationProcessor.getTrackRecommendationsUnsuccessfullyWithoutQueryParameters();
+        trackRecommendationProcessor.verifyTrackRecommendationsRequestRespondedWith400SttCode(dataRetrieved);
+    }
+
     @BeforeMethod
     protected void testPreparation() {
 
@@ -38,10 +47,5 @@ public class TrackRecommendationTest extends BaseApiTestService {
                         userAuthenticationDbModel.getClientSecret(),
                         userAuthenticationDbModel.getGrantType())
         );
-    }
-
-    @AfterMethod
-    protected void testCleaning() {
-
     }
 }

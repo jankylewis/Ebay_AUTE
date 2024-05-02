@@ -64,9 +64,12 @@ public class DbQueryList {
         for (int idx = 0; idx < updatedColumns.size(); idx++) {
 
             if (idx == updatedColumns.size() - 1)
-                setClause += updatedColumns.get(idx) + " = " + updatedValues.get(idx);
+            {
+                setClause += updatedColumns.get(idx) + " = " + handleApostrophe(updatedValues.get(idx));
+                break;
+            }
 
-            setClause += updatedColumns.get(idx) + " = " + updatedValues.get(idx) + ", ";
+            setClause += updatedColumns.get(idx) + " = " + handleApostrophe(updatedValues.get(idx)) + ", ";
         }
 
         return "UPDATE " + table + setClause + " WHERE " + columnAtCondition + " = " + handleApostrophe(condition);

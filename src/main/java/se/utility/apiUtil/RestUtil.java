@@ -212,14 +212,14 @@ public class RestUtil {
 
         setRequestUri(requestUri);
 
-        mapQueryParameters(parametersMap);
+        if (parametersMap != null)
+            mapQueryParameters(parametersMap);
 
         //Invoking a requested body if needed
-        if (requestContentType != null && requestBody != null) {
+        if (requestContentType != null && requestBody != null)
             switch (requestContentType) {
                 case URLENC -> buildUrlencodedForm(requestBody);
             }
-        }
 
         switch (requestMethod) {
             case GET -> sendGetRequest();
@@ -229,6 +229,7 @@ public class RestUtil {
             case PATCH -> sendPatchRequest();
             case DELETE -> sendDeleteRequest();
             case OPTIONS -> sendOptionsRequest();
+
             default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
         }
 
