@@ -3,6 +3,7 @@ package se.requestProcessor;
 import io.restassured.response.Response;
 import org.javatuples.Pair;
 import org.jetbrains.annotations.NotNull;
+import se.model.apiModel.requestModel.AuthenticationModel;
 import se.model.apiModel.responseModel.ErrorMessageModel;
 import se.utility.apiUtil.RestUtil;
 
@@ -11,22 +12,28 @@ import java.util.Objects;
 
 public class MarketProcessor extends BaseProcessor {
 
+    //region Variables
+
+    private AuthenticationModel _authenticationModel;
+    private final String marketBrowsingUri = "https://api.spotify.com/v1/markets";
+
+    //endregion
+
     public MarketProcessor() {
         super();
     }
 
-    //region URIs
-
-    private final String marketBrowsingUri = "https://api.spotify.com/v1/markets";
-
-    //endregion
+    public MarketProcessor(AuthenticationModel authenticationModel) {
+        _authenticationModel = authenticationModel;
+    }
 
     //region Making requests
 
     public Response getMarketsWithNormalUri() {       //Normal request
 
         Response response = _restUtil.sendAuthenticatedRequestWithResponse(
-            marketBrowsingUri,
+                _authenticationModel,
+                marketBrowsingUri,
                 null,
                 null,
                 RestUtil.EMethod.GET
@@ -38,6 +45,7 @@ public class MarketProcessor extends BaseProcessor {
     public Response getMarketsWithNormalUri(String abnormalSuffix) {       //Abnormal request
 
         Response response = _restUtil.sendAuthenticatedRequestWithResponse(
+                _authenticationModel,
                 marketBrowsingUri + "/" + abnormalSuffix,
                 null,
                 null,
@@ -119,5 +127,5 @@ public class MarketProcessor extends BaseProcessor {
         verificationWentFailed();
     }
 
-    //endregion
+    //endregion Verifications
 }

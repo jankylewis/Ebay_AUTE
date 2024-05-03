@@ -62,6 +62,9 @@ public class RestUtil {
 
     private RequestSpecification mapQueryParameters(Map<String, Object> parametersMap) {
 
+        if (parametersMap == null)
+            throw new IllegalArgumentException("The list of query parameters was empty!     ");
+
         _requestSpecification.queryParams(parametersMap);
         return _requestSpecification;
     }
@@ -201,6 +204,77 @@ public class RestUtil {
     public Response sendAuthenticatedRequestWithResponse(
             AuthenticationModel apiAuthenticationModel,
             String requestUri,
+            Collection<Pair<Object, Object>> requestBody,
+            ContentType requestContentType,
+            EMethod requestMethod
+    ) {
+
+        //Retrieving access token with a desired API Authentication Model
+        setAccessToken(apiAuthenticationModel);
+
+        setRequestUri(requestUri);
+
+        //Invoking a requested body if needed
+        if (requestContentType != null && requestBody != null)
+            switch (requestContentType) {
+                case URLENC -> buildUrlencodedForm(requestBody);
+            }
+
+        switch (requestMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+            case PUT -> sendPutRequest();
+            case HEAD -> sendHeadRequest();
+            case PATCH -> sendPatchRequest();
+            case DELETE -> sendDeleteRequest();
+            case OPTIONS -> sendOptionsRequest();
+
+            default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
+        }
+
+        return _response;
+    }
+
+    public HashMap<?, Response> sendAuthenticatedRequestWithResponse(
+            String expectedToken,
+            AuthenticationModel apiAuthenticationModel,
+            String requestUri,
+            @Nullable Collection<Pair<Object, Object>> requestBody,
+            @Nullable ContentType requestContentType,
+            EMethod requestMethod
+    ) {
+
+        //Retrieving access token with a desired API Authentication Model
+        setAccessToken(apiAuthenticationModel);
+
+        setRequestUri(requestUri);
+
+        //Invoking a requested body if needed
+        if (requestContentType != null && requestBody != null) {
+            switch (requestContentType) {
+                case URLENC -> buildUrlencodedForm(requestBody);
+            }
+        }
+
+        switch (requestMethod) {
+            case GET -> sendGetRequest();
+            case POST -> sendPostRequest();
+            case PUT -> sendPutRequest();
+            case HEAD -> sendHeadRequest();
+            case PATCH -> sendPatchRequest();
+            case DELETE -> sendDeleteRequest();
+            case OPTIONS -> sendOptionsRequest();
+            default -> throw new IllegalArgumentException("Checking the inputted Request Method once it could be invalid!    ");
+        }
+
+        return new HashMap<>(){{
+            put(expectedToken, _response);
+        }};
+    }
+
+    public Response sendAuthenticatedRequestWithResponse(
+            AuthenticationModel apiAuthenticationModel,
+            String requestUri,
             Map<String, Object> parametersMap,
             Collection<Pair<Object, Object>> requestBody,
             ContentType requestContentType,
@@ -212,8 +286,7 @@ public class RestUtil {
 
         setRequestUri(requestUri);
 
-        if (parametersMap != null)
-            mapQueryParameters(parametersMap);
+        mapQueryParameters(parametersMap);
 
         //Invoking a requested body if needed
         if (requestContentType != null && requestBody != null)
