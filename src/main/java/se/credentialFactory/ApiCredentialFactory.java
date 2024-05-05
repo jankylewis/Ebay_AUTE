@@ -37,16 +37,6 @@ public class ApiCredentialFactory {
         return _apiCredentials;
     }
 
-    public Map<String, List<Map<String, String>>> az() throws FileNotFoundException {
-
-        _yamlFileReader.setYamlPath(_apiYamlPath);
-
-        Map<String, List<Map<String, String>>> d =
-                (Map<String, List<Map<String, String>>>) _yamlFileReader.retrieveYamlMap();
-
-        return d;
-    }
-
     public Map<String, String> retrieveAnApiCredential(String identificationUsed) throws FileNotFoundException {
 
         _yamlFileReader.setYamlPath(_apiYamlPath);

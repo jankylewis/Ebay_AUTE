@@ -9,8 +9,9 @@ import java.util.Objects;
 
 public class DbCredentialFactory {
 
-    private YamlFileReader _yamlFileReader;
     private final String _dbYamlPath = "./src/main/java/se/dataManager/accountManager/db_credential.yaml";
+
+    private YamlFileReader _yamlFileReader;
     private Map<String, List<Map<String, String>>> _dbData;
     private List<Map<String, String>> _dbCredentials;
 

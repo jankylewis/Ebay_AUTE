@@ -3,6 +3,7 @@ package se.spo.api;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import se.model.apiModel.requestModel.AuthenticationModel;
 import se.requestProcessor.MarketProcessor;
 
 public class MarketTest extends BaseApiTestService {
@@ -44,6 +45,11 @@ public class MarketTest extends BaseApiTestService {
 
     @BeforeMethod
     protected void testPreparation() {
-        marketProcessor = new MarketProcessor();
+        System.out.println("M THREAD ID = " + Thread.currentThread().getId());
+        marketProcessor = new MarketProcessor(
+                new AuthenticationModel(
+                userAuthenticationDbModel.getClientId(),
+                userAuthenticationDbModel.getClientSecret(),
+                userAuthenticationDbModel.getGrantType()));
     }
 }
