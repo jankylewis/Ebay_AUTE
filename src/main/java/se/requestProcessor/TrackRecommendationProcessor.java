@@ -10,6 +10,7 @@ import java.util.Map;
 public class TrackRecommendationProcessor extends BaseProcessor {
 
     private AuthenticationModel _authenticationModel;
+    private final String trackRecommendationUri = "https://api.spotify.com/v1/recommendations";
 
     public TrackRecommendationProcessor() {
         super();
@@ -19,8 +20,6 @@ public class TrackRecommendationProcessor extends BaseProcessor {
     public TrackRecommendationProcessor(AuthenticationModel authenticationModel) {
         _authenticationModel = authenticationModel;
     }
-
-    private final String trackRecommendationUri = "https://api.spotify.com/v1/recommendations";
 
     public Response getTrackRecommendationsSuccessfully(Map<String, Object> expParametersMap) {
 
@@ -43,7 +42,6 @@ public class TrackRecommendationProcessor extends BaseProcessor {
                 trackRecommendationUri,
                 null,
                 null,
-                null,
                 RestUtil.EMethod.GET
         );
 
@@ -54,16 +52,12 @@ public class TrackRecommendationProcessor extends BaseProcessor {
 
         Pair<Boolean, Integer> responseHealth = verifyResponseStatusCodeWentGreen(response);
 
-        try {
-            if (responseHealth.getValue0()) verificationWentPassed();
-            else {
-                LOGGER.error("Response status code came different with the expected status code! ");
-                LOGGER.info("Actual status code >< Expected status code: " + responseHealth.getValue1() + " >< " + apiConstant.GREEN_STATUS);
+        if (responseHealth.getValue0()) verificationWentPassed();
+        else {
+            LOGGER.error("Response status code came different with the expected status code! ");
+            LOGGER.info("Actual status code >< Expected status code: " + responseHealth.getValue1() + " >< " + apiConstant.GREEN_STATUS);
 
-                verificationWentFailed();
-            }
-        } catch(AssertionError aeEx) {
-            throw aeEx;
+            verificationWentFailed();
         }
     }
 

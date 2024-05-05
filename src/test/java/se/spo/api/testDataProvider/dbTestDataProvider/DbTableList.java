@@ -6,7 +6,7 @@ public class DbTableList {
 
         protected final String USER_AUTHENTICATION_TABLE = "userAuthenticationTb";
 
-        //Listing columns
+        //Listing columns where their values exactly matched the columns existed in DB
         protected String clientId = "clientId";
         protected String clientSecret = "clientSecret";
         protected String grantType = "grantType";

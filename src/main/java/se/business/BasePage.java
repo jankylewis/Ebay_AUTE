@@ -69,7 +69,9 @@ public class BasePage extends BaseObject {
 
     public Boolean waitForSkeletonLoadingToBeDetached(@Nullable Integer maxAttempts) {
 
-//        //Waiting for skeleton to be presented
+
+
+        //Waiting for skeleton to be presented
 //        Boolean isSkeletonVisible = pollingWaitHelper.waitForElementToBeVisible(SECTION_SKELETON_LOADING, null);
 //
 //        //Waiting for skeleton to be detached

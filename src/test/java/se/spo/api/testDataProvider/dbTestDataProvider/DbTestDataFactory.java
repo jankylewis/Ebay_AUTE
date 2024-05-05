@@ -35,14 +35,12 @@ public class DbTestDataFactory {
     private ResultSet _resultSet;
 
     private DbQueryList _dbQueryList;
-    private DbTableList _dbTableList;
 
     private ApiCredentialFactory _apiCredentialFactory;
     private Map<String, String> _anApiCredential;
 
     private DateTimeUtil _dateTimeUtil;
     private DbTableList.UserAuthenticationTable _userAuthenticationTable;
-    private UserAuthenticationDbModel _userAuthenticationModel;
 
     //endregion
 
@@ -52,7 +50,6 @@ public class DbTestDataFactory {
         _dbManipulationUtil = new DbManipulationUtil();
         _dbResultProcessing = new DbResultProcessing();
         _dbQueryList = new DbQueryList();
-        _dbTableList = new DbTableList();
         _apiCredentialFactory = new ApiCredentialFactory();
         _dateTimeUtil = new DateTimeUtil();
     }
@@ -90,11 +87,11 @@ public class DbTestDataFactory {
                     .get(0);
         } else {
 
-            String clientIdStr = _userAuthenticationTable.clientId.toString();
-            String clientSecretStr = _userAuthenticationTable.clientSecret.toString();
-            String grantTypeStr = _userAuthenticationTable.grantType.toString();
-            String beCreatedAtStr = _userAuthenticationTable.beCreatedAt.toString();
-            String beUsedAtStr = _userAuthenticationTable.beUsed.toString();
+            String clientIdStr = _userAuthenticationTable.clientId;
+            String clientSecretStr = _userAuthenticationTable.clientSecret;
+            String grantTypeStr = _userAuthenticationTable.grantType;
+            String beCreatedAtStr = _userAuthenticationTable.beCreatedAt;
+            String beUsedAtStr = _userAuthenticationTable.beUsed;
 
             Date currentDate = _dateTimeUtil.getCurrentDate();
             userAuthenticationDbModel.beCreatedAt = currentDate;
@@ -126,7 +123,7 @@ public class DbTestDataFactory {
 
     //region Cleaning data
 
-    public DbTestDataFactory cleanUserAuthenticationDb(@NotNull UserAuthenticationDbModel userAuthenticationDbModel) throws SQLException {
+    public DbTestDataFactory tearUserAuthenticationDbDown(@NotNull UserAuthenticationDbModel userAuthenticationDbModel) throws SQLException {
 
         userAuthenticationDbModel.setLastUsedAt(_dateTimeUtil.getCurrentDate());
 

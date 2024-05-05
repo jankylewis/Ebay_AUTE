@@ -89,12 +89,11 @@ public class DbQueryList {
 
         Class<?> objectClassType = handledObject.getClass();
 
-        if (objectClassType == String.class) {
+        if (objectClassType == String.class)
             return "'" + handledObject + "'";
-        } else if (objectClassType == Integer.class) {
+        else if (objectClassType == Integer.class)
             return Integer.parseInt(handledObject.toString());
-        } else {
+        else
             throw new IllegalArgumentException("The desired object unexpectedly encountered errors!  ");
-        }
     }
 }

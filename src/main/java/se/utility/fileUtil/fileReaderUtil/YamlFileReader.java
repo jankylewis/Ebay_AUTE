@@ -5,7 +5,6 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 
 public class YamlFileReader {
@@ -16,8 +15,7 @@ public class YamlFileReader {
     private String _yamlPath;
 
     public YamlFileReader(){
-        if (_yaml == null)
-            _yaml = new Yaml();
+        if (_yaml == null)  _yaml = new Yaml();
     }
 
     public void setYamlPath(String yamlPath) {

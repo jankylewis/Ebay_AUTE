@@ -40,7 +40,7 @@ public class TrackRecommendationTest extends BaseApiTestService {
 
     @BeforeMethod
     protected void testPreparation() {
-
+        System.out.println("TR THREAD ID = " + Thread.currentThread().getId());
         trackRecommendationProcessor = new TrackRecommendationProcessor(
                 new AuthenticationModel(
                         userAuthenticationDbModel.getClientId(),

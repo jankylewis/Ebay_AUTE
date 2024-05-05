@@ -21,7 +21,7 @@ public final class DbConnectionService {
     public DbConnectionService(String dbName){
 
         try { _dbCredentialMap = _dbCredentialFactory.retrieveADbCredential(dbName); }
-        catch (FileNotFoundException fileNotFoundException) { throw new RuntimeException("Could not find the db file: " + fileNotFoundException); }
+        catch (FileNotFoundException fileNotFoundException) { throw new RuntimeException("Could not find the DB file: " + fileNotFoundException); }
 
         _dbConnectionString = _dbCredentialMap.get("db_connection_string");
         _username = _dbCredentialMap.get("username");

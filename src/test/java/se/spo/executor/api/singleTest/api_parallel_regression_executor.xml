@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="API Regression Suite > Parallel TSs"
+        parallel="tests"
+        thread-count="10">
+
+    <test name="API Market Test" thread-count="3" parallel="methods">
+        <classes>
+            <class name="se.spo.api.MarketTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRetrievingMarketsWith404Code"></include>
+                    <include name="spotifyApiTest_VerifyApiProcessedRetrievingMarketsWithRedCodeByAnInvalidAccessToken"></include>
+                    <include name="spotifyApiTest_VerifyApiProcessedRetrievingMarketsWithGreenCode"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="API Track Recommendations Test" thread-count="2" parallel="methods">
+        <classes>
+            <class name="se.spo.api.TrackRecommendationTest">
+                <methods>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestWithRedResponseCode"></include>
+                    <include name="spotifyApiTest_VerifyApiProcessedRequestWithGreenResponseCode"></include>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
