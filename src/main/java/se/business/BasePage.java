@@ -40,7 +40,7 @@ public class BasePage extends BaseObject {
         LOGGER = LoggingUtil.TL_LOGGER.get();
     }
 
-    //endregion
+    //endregion Retrieving global variables
 
     //endregion
 
